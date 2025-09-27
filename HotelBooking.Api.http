@@ -1,6 +1,7 @@
-@HotelBooking.Api_HostAddress = http://localhost:5025
+ignore ---
+@BASE_URI=http: //localhost:5025
 
-GET {{HotelBooking.Api_HostAddress}}/health
+GET {{BASE_URI}}/health
 Accept: application/json
 
 ###
