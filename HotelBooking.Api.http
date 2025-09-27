@@ -1,7 +1,0 @@
-ignore ---
-@BASE_URI=http: //localhost:5025
-
-GET {{BASE_URI}}/health
-Accept: application/json
-
-###

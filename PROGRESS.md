@@ -25,7 +25,7 @@ This markdown file will be used to document the step-by-step progress of the pro
 
 4. **Created User Entity and Added to DbContext**
    - Created a `User` class with properties: `Id`, `FirstName`, `LastName`, and `Age`.
-   - Added `public DbSet<User> Users { get; set; }` to `HotelBookingContext` for EF Core to manage the Users table.
+   - Added `public DbSet<User> Users { get; set; }` to `ApiContext` for EF Core to manage the Users table.
    - Used the standard `{ get; set; }` property pattern for compatibility with EF Core.
 
 5. **Created Initial Migration for Users Table**
@@ -43,10 +43,20 @@ This markdown file will be used to document the step-by-step progress of the pro
 
 7. **Added RoomType Entity**
    - Created a `RoomType` class with properties: `Value` (PK) and `Label`.
-   - Added `public DbSet<RoomType> RoomTypes { get; set; }` to `HotelBookingContext`.
+   - Added `public DbSet<RoomType> RoomTypes { get; set; }` to `ApiContext`.
    - Next: Create a migration and update the database to add the RoomTypes table.
 
-8. *(Add your next steps here as you progress!)*
+8. **Implemented User CRUD Endpoints**
+   - Created `UsersController` with endpoints for:
+     - Get all users (`GET /api/users`)
+     - Get user by ID (`GET /api/users/{id}`)
+     - Create user (`POST /api/users`)
+     - Update user (`PUT /api/users/{id}`)
+     - Delete user (`DELETE /api/users/{id}`)
+   - Used EF Core async methods for database operations.
+   - Next: Test endpoints and add DTOs/validation as needed.
+
+9. *(Add your next steps here as you progress!)*
 
 ---
 
