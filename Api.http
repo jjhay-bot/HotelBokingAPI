@@ -113,3 +113,41 @@ Authorization: Bearer {{JWT_TOKEN}}
 DELETE {{BASE_URI}}/api/v1/roomtypes/1
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
+
+### Get all rooms
+GET {{BASE_URI}}/api/v1/rooms
+Accept: application/json
+
+### Create a new room (Admin only)
+POST {{BASE_URI}}/api/v1/rooms
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "roomTypeId": 1,
+    "roomNumber": 101,
+    "pricePerNight": 250.00,
+    "capacity": 2,
+    "bedType": "King Bed",
+    "size": "65 sq m",
+    "floor": 1,
+    "status": "available",
+    "amenities": ["Balcony", "King Bed", "Mini Bar", "City View", "WiFi", "Air Conditioning"]
+}
+
+### Patch a room (Admin only)
+PATCH {{BASE_URI}}/api/v1/rooms/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "status": "maintenance",
+    "pricePerNight": 300.00
+}
+
+### Delete a room (Admin only)
+DELETE {{BASE_URI}}/api/v1/rooms/1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
