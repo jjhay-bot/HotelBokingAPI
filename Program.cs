@@ -39,6 +39,18 @@ builder.Services.AddAuthentication(options =>
 });
 
 builder.Services.AddAutoMapper(typeof(Program));
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+    {
+        policy.WithOrigins(
+            "http://localhost:5173",
+            "https://bedderdeals.fun-at.work"
+        )
+        .AllowAnyHeader()
+        .AllowAnyMethod();
+    });
+});
 
 var app = builder.Build();
 
@@ -49,6 +61,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseAuthentication(); // Add this before UseAuthorization if you add it later
 app.UseAuthorization(); // <-- Ensure this is present and after UseAuthentication
 // Map controller endpoints
