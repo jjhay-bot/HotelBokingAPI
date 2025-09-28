@@ -13,4 +13,5 @@ public class Room
     public string Amenities { get; set; } = string.Empty; // e.g., "WiFi,TV,Mini Bar"
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime UpdatedAt { get; set; } = DateTime.UtcNow;
+    public int? OccupiedByUserId { get; set; } // User currently occupying the room, null if vacant
 }

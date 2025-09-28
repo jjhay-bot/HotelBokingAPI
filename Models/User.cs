@@ -10,5 +10,6 @@ public class User
     public string PasswordHash { get; set; } = string.Empty; // For authentication
     public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     public DateTime? UpdatedAt { get; set; }
+    public int? CurrentRoomId { get; set; } // Room currently occupied by user, null if none
     // Add navigation properties if needed later
 }

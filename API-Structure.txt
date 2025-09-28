@@ -1,0 +1,23 @@
+API Structure & Relationships (Simple Diagram)
+
+[User] <--- books --- [Booking] --- is for ---> [Room] --- has ---> [RoomType]
+   |                        |
+   |                        |
+   |                        v
+   |                  [Gallery]
+   |
+   +--- occupies ---> [Room] (CurrentRoomId)
+
+Entities:
+- User: Id, FirstName, LastName, Email, Age, Role, IsActive, PasswordHash, CreatedAt, UpdatedAt, CurrentRoomId
+- Room: Id, RoomTypeId, RoomNumber, PricePerNight, Capacity, BedType, Size, Floor, Status, Amenities, CreatedAt, UpdatedAt, OccupiedByUserId
+- RoomType: Id, Name, Description
+- Booking: Id, UserId, RoomId, StartDate, EndDate, Status, TotalPrice, Notes, CreatedAt, UpdatedAt
+- Gallery: Id, RoomId, Title, Img, Alt
+
+Key Relationships:
+- User 1---* Booking *---1 Room
+- RoomType 1---* Room
+- Room 1---* Gallery
+- User 0..1---1 Room (CurrentRoomId)
+- Room 0..1---1 User (OccupiedByUserId)

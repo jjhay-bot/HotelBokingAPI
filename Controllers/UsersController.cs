@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
+using AutoMapper;
 
 // This controller uses dependency injection to receive an instance of ApiContext.
 // ApiContext is the Entity Framework Core DbContext for communicating with the database.
@@ -13,11 +14,13 @@ namespace Api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly ApiContext _context;
+        private readonly IMapper _mapper;
 
         // The constructor receives ApiContext via dependency injection.
-        public UsersController(ApiContext context)
+        public UsersController(ApiContext context, IMapper mapper)
         {
             _context = context;
+            _mapper = mapper;
         }
         // GET: api/v1/users
         [HttpGet]
@@ -57,7 +60,10 @@ namespace Api.Controllers
                 .Take(pageSize)
                 .ToListAsync();
 
-            return Ok(users);
+            // Add CurrentRoomId to user responses for admin dashboard
+            var userResponses = _mapper.Map<List<UserDto>>(users);
+
+            return Ok(userResponses);
         }
         // POST: api/v1/users
         [HttpPost]

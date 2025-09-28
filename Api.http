@@ -192,3 +192,85 @@ Authorization: Bearer {{JWT_TOKEN}}
 DELETE {{BASE_URI}}/api/v1/galleries/1
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
+
+### Get all bookings
+GET {{BASE_URI}}/api/v1/bookings
+Accept: application/json
+
+### Get booking by id
+GET {{BASE_URI}}/api/v1/bookings/1
+Accept: application/json
+
+### Create a new booking (User or Admin)
+POST {{BASE_URI}}/api/v1/bookings
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "userId": 1,
+    "roomId": 2,
+    "startDate": "2025-10-01T14:00:00Z",
+    "endDate": "2025-10-05T12:00:00Z",
+    "status": "Reserved",
+    "totalPrice": 500.00,
+    "notes": "Late check-in requested"
+}
+
+### Update a booking (User or Admin)
+PUT {{BASE_URI}}/api/v1/bookings/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 1,
+    "userId": 1,
+    "roomId": 2,
+    "startDate": "2025-10-01T14:00:00Z",
+    "endDate": "2025-10-05T12:00:00Z",
+    "status": "Confirmed",
+    "totalPrice": 500.00,
+    "notes": "Updated notes"
+}
+
+### Patch a booking (User or Admin)
+PATCH {{BASE_URI}}/api/v1/bookings/1
+Accept: application/json
+Content-Type: application/json-patch+json
+Authorization: Bearer {{JWT_TOKEN}}
+
+[
+    { "op": "replace", "path": "/status", "value": "CheckedIn" },
+    { "op": "replace", "path": "/notes", "value": "Arrived early" }
+]
+
+### Check out a booking (User or Admin)
+PATCH {{BASE_URI}}/api/v1/bookings/1
+Accept: application/json
+Content-Type: application/json-patch+json
+Authorization: Bearer {{JWT_TOKEN}}
+
+[
+    { "op": "replace", "path": "/status", "value": "CheckedOut" }
+]
+
+### Get bookings by user id
+GET {{BASE_URI}}/api/v1/bookings/by-user/1
+Accept: application/json
+
+### Delete a booking (Admin only)
+DELETE {{BASE_URI}}/api/v1/bookings/1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+### Get all rooms (showing occupancy)
+GET {{BASE_URI}}/api/v1/rooms
+Accept: application/json
+# Response includes: OccupiedByUserId (user ID of occupant, null if vacant)
+
+### Get all users (showing CurrentRoomId)
+GET {{BASE_URI}}/api/v1/users
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+# Response includes: CurrentRoomId (room ID user is occupying, null if none)

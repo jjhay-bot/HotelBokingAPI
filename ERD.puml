@@ -1,0 +1,65 @@
+@startuml
+entity User {
+  Id : int <<PK>>
+  FirstName : string
+  LastName : string
+  Email : string
+  Age : int
+  Role : string
+  IsActive : bool
+  PasswordHash : string
+  CreatedAt : datetime
+  UpdatedAt : datetime
+  CurrentRoomId : int <<FK>>
+}
+
+entity Room {
+  Id : int <<PK>>
+  RoomTypeId : int <<FK>>
+  RoomNumber : int
+  PricePerNight : decimal
+  Capacity : int
+  BedType : string
+  Size : string
+  Floor : int
+  Status : string
+  Amenities : string
+  CreatedAt : datetime
+  UpdatedAt : datetime
+  OccupiedByUserId : int <<FK>>
+}
+
+entity RoomType {
+  Id : int <<PK>>
+  Name : string
+  Description : string
+}
+
+entity Booking {
+  Id : int <<PK>>
+  UserId : int <<FK>>
+  RoomId : int <<FK>>
+  StartDate : datetime
+  EndDate : datetime
+  Status : string
+  TotalPrice : decimal
+  Notes : string
+  CreatedAt : datetime
+  UpdatedAt : datetime
+}
+
+entity Gallery {
+  Id : int <<PK>>
+  RoomId : int <<FK>>
+  Title : string
+  Img : string
+  Alt : string
+}
+
+User ||--o{ Booking : "books"
+Room ||--o{ Booking : "is booked in"
+RoomType ||--o{ Room : "has"
+Room ||--o{ Gallery : "has"
+User |o--|| Room : "occupies (CurrentRoomId)"
+Room |o--|| User : "occupied by (OccupiedByUserId)"
+@enduml

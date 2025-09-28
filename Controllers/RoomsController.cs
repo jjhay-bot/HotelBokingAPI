@@ -39,7 +39,8 @@ namespace api.Controllers
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
                 CreatedAt = r.CreatedAt,
-                UpdatedAt = r.UpdatedAt
+                UpdatedAt = r.UpdatedAt,
+                OccupiedByUserId = r.OccupiedByUserId
             }).ToList();
             return Ok(roomDtos);
         }

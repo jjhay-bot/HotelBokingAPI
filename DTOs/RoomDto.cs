@@ -15,4 +15,5 @@ public class RoomDto
     public List<string> Amenities { get; set; } = new List<string>();
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public int? OccupiedByUserId { get; set; } // User currently occupying the room, null if vacant
 }

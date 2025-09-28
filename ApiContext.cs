@@ -12,6 +12,7 @@ public class ApiContext : DbContext
 
     public DbSet<Room> Rooms { get; set; }
     public DbSet<Gallery> Galleries { get; set; }
+    public DbSet<Booking> Bookings { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -59,5 +60,16 @@ public class ApiContext : DbContext
             .HasOne(g => g.Room)
             .WithMany()
             .HasForeignKey(g => g.RoomId);
+
+        modelBuilder.Entity<Booking>()
+            .HasIndex(b => b.UserId);
+        modelBuilder.Entity<Booking>()
+            .HasOne(b => b.User)
+            .WithMany()
+            .HasForeignKey(b => b.UserId);
+        modelBuilder.Entity<Booking>()
+            .HasOne(b => b.Room)
+            .WithMany()
+            .HasForeignKey(b => b.RoomId);
     }
 }
