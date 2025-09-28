@@ -11,6 +11,7 @@ public class ApiContext : DbContext
     public DbSet<RoomType> RoomTypes { get; set; }
 
     public DbSet<Room> Rooms { get; set; }
+    public DbSet<Gallery> Galleries { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -53,5 +54,10 @@ public class ApiContext : DbContext
             new Room { Id = 9, RoomTypeId = 9, RoomNumber = 501, PricePerNight = 110, Capacity = 2, BedType = "Twin", Size = "28 sq m", Floor = 5, Status = "available", Amenities = "WiFi,TV,Accessible Bathroom", CreatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc), UpdatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc) },
             new Room { Id = 10, RoomTypeId = 10, RoomNumber = 502, PricePerNight = 1000, Capacity = 4, BedType = "King", Size = "120 sq m", Floor = 5, Status = "available", Amenities = "WiFi,TV,Mini Bar,Balcony,City View,Private Pool", CreatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc), UpdatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc) }
         );
+
+        modelBuilder.Entity<Gallery>()
+            .HasOne(g => g.Room)
+            .WithMany()
+            .HasForeignKey(g => g.RoomId);
     }
 }

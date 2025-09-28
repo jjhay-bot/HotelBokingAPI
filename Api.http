@@ -152,3 +152,43 @@ Authorization: Bearer {{JWT_TOKEN}}
 DELETE {{BASE_URI}}/api/v1/rooms/1
 Accept: application/json
 Authorization: Bearer {{JWT_TOKEN}}
+
+### Get all galleries
+GET {{BASE_URI}}/api/v1/galleries
+Accept: application/json
+
+### Get gallery by id
+GET {{BASE_URI}}/api/v1/galleries/1
+Accept: application/json
+
+### Create a new gallery (Admin only)
+POST {{BASE_URI}}/api/v1/galleries
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "roomId": 2,
+    "title": "Room Overview - Main Living Area",
+    "img": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "alt": "Main living area overview"
+}
+
+### Update a gallery (Admin only)
+PUT {{BASE_URI}}/api/v1/galleries/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 1,
+    "roomId": 1,
+    "title": "Updated Title",
+    "img": "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "alt": "Updated alt text"
+}
+
+### Delete a gallery (Admin only)
+DELETE {{BASE_URI}}/api/v1/galleries/1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}

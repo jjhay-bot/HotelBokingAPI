@@ -349,6 +349,42 @@ await _context.SaveChangesAsync(); // Throws if email is duplicate
 
 ---
 
-This flow helps new developers understand how authentication and JWT security are implemented in this API.
+## Major Issues & Solutions (PostgreSQL, EF Core, API)
+
+### Amenities Type Migration (text[] → string)
+- **Problem:**
+  - Originally, the `Amenities` property in the `Room` model was a `List<string>`, which mapped to a `text[]` column in PostgreSQL.
+  - For EF Core seeding and simpler API design, we switched `Amenities` to a `string` (comma-separated values) in the model and database.
+  - This required a migration to change the column type from `text[]` to `text`.
+- **Migration Steps:**
+  1. Changed the model property to `public string Amenities { get; set; }`.
+  2. Created a migration to alter the column type.
+  3. Fixed seeding to use static `DateTime` values (no `DateTime.UtcNow` in `HasData`).
+  4. Dropped and recreated the database to resolve duplicate key and type mismatch errors.
+  5. Reapplied all migrations and seed data.
+- **API Impact:**
+  - API accepts and stores amenities as a comma-separated string.
+  - API responses expose amenities as a `List<string>` (split in the DTO mapping).
+  - PATCH endpoint accepts amenities as a list and converts to string for storage.
+
+### RoomType in Room API Responses
+- **Current:**
+  - The API returns `roomTypeId` in each room response.
+  - The full `RoomType` object is not included by default.
+  - The frontend should fetch `/api/v1/roomtypes` and join by `roomTypeId` as needed.
+- **Alternative:**
+  - To embed the full `RoomType` in each room response, update the DTO and controller to include and map the related entity.
+
+### Common Migration Pitfalls
+- Using dynamic values (e.g., `DateTime.UtcNow`) in `HasData` causes EF Core to see the model as always changing. Always use static values for seeding.
+- If you get duplicate key errors on seeding, drop and recreate the database in dev, or clean up the data before applying migrations.
+- After dropping the database, you may need to manually recreate it in managed services (e.g., Neon) before running `dotnet ef database update`.
+
+### HTTP API Sample Notes
+- For Room creation, `amenities` must be a comma-separated string in the request body.
+- For PATCH, you can send amenities as a list; the backend will convert it to a string for storage.
+- API responses always return amenities as a list for frontend convenience.
+
+---
 
 _Continue to update this file as you make progress in your project._
