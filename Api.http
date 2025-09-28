@@ -1,5 +1,7 @@
 ignore ---
-@BASE_URI=http://localhost:5025
+@BASE_URI=http: //localhost:5025
+
+@JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxIiwiZW1haWwiOiJhbGljZUBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZXhwIjoxNzU5MDUyMzI4LCJpc3MiOiJIb3RlbEJvb2tpbmdBcGkiLCJhdWQiOiJIb3RlbEJvb2tpbmdBcGlVc2VycyJ9.UxGi8dnplceGOTHwNSg-jlTKf_I4vjh9dH6B9gW3OmA
 
 GET {{BASE_URI}}/health
 Accept: application/json
@@ -16,12 +18,75 @@ Accept: application/json
 Content-Type: application/json
 
 {
-  "firstName": "fake",
-  "lastName": "Doe",
-  "email": "fake.doe@example.com",
-  "age": 21,
-  "role": "Admin",
-  "isActive": true,
-  "passwordHash": "password"
+    "firstName": "fake",
+    "lastName": "Doe",
+    "email": "fake.doe@example.com",
+    "age": 21,
+    "role": "Admin",
+    "isActive": true,
+    "passwordHash": "password"
 }
+
+###
+
+GET {{BASE_URI}}/api/v1/roomtypes
+Accept: application/json
+
+###
+
+POST {{BASE_URI}}/api/v1/roomtypes
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "name": "Deluxe",
+    "description": "Deluxe room with premium features"
+}
+
+###
+
+PUT {{BASE_URI}}/api/v1/roomtypes/1
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 1,
+    "name": "Single Updated",
+    "description": "Updated description for single room"
+}
+
+###
+
+DELETE {{BASE_URI}}/api/v1/roomtypes/1
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+###
+
+POST {{BASE_URI}}/api/v1/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "alice@example.com",
+    "password": "password"
+}
+
+###
+
+POST {{BASE_URI}}/api/v1/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "firstName": "Test",
+    "lastName": "User",
+    "email": "testuser@example.com",
+    "age": 22,
+    "passwordHash": "testpass",
+    "role": "User"
+}
+
 ###

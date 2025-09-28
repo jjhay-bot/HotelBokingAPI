@@ -25,5 +25,11 @@ public class ApiContext : DbContext
             new User { Id = 4, FirstName = "Diana", LastName = "Prince", Email = "diana@example.com", Age = 32, Role = "Manager", IsActive = true, PasswordHash = "password", CreatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc) },
             new User { Id = 5, FirstName = "Eve", LastName = "Adams", Email = "eve@example.com", Age = 27, Role = "User", IsActive = true, PasswordHash = "password", CreatedAt = new DateTime(2025, 9, 28, 0, 0, 0, DateTimeKind.Utc) }
         );
+
+        modelBuilder.Entity<RoomType>().HasData(
+            new RoomType { Id = 1, Name = "Single", Description = "Single bed room" },
+            new RoomType { Id = 2, Name = "Double", Description = "Double bed room" },
+            new RoomType { Id = 3, Name = "Suite", Description = "Suite with extra amenities" }
+        );
     }
 }

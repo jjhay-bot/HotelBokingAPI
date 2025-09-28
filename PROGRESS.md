@@ -236,4 +236,99 @@ await _context.SaveChangesAsync(); // Throws if email is duplicate
 
 ---
 
+## Deployment Procedure: Neon PostgreSQL & Azure Web App
+
+### 1. Deploying Database to Neon PostgreSQL
+
+1. **Create a Neon PostgreSQL project** (if not already done) at [Neon.tech](https://neon.tech/).
+2. **Get your connection string** from the Neon dashboard (format: `Host=...;Username=...;Password=...;Database=...`).
+3. **Update your local `appsettings.Development.json`** with the Neon connection string for development/testing.
+4. **Set the connection string as an environment variable** in Azure (see below for details).
+5. **Apply EF Core migrations to Neon:**
+   - Locally, run:
+     ```sh
+     dotnet ef database update --connection "<your-neon-connection-string>"
+     ```
+   - Or, enable automatic migrations on app startup in `Program.cs` (for small projects):
+     ```csharp
+     using (var scope = app.Services.CreateScope())
+     {
+         var db = scope.ServiceProvider.GetRequiredService<ApiContext>();
+         db.Database.Migrate();
+     }
+     ```
+
+### 2. Deploying API to Azure Web App
+
+1. **Create an Azure App Service** (Web App) for your API.
+2. **Publish your .NET API** to Azure (via Visual Studio, VS Code, or CLI):
+   - Example using CLI:
+     ```sh
+     dotnet publish -c Release
+     # Deploy using Azure CLI or from the Azure Portal
+     ```
+3. **Set environment variables in Azure:**
+   - Go to your App Service → Configuration → Application settings.
+   - Add a new setting:
+     - Name: `ConnectionStrings__DefaultConnection`
+     - Value: (your Neon PostgreSQL connection string)
+   - Save and restart the app.
+4. **Verify deployment:**
+   - Test `/health` and `/api/v1/users` endpoints on your Azure URL.
+   - If you see errors, check logs in Azure Portal (App Service → Log stream).
+
+### 3. Tips
+- Never commit secrets or connection strings to GitHub.
+- Use environment variables for production secrets.
+- Document any manual steps or gotchas here for future reference.
+
+---
+
+## JWT Claims: Important Notes (Simple)
+
+- Only add user info to the JWT if the client or other services really need it.
+- More claims = bigger tokens (slower network, more data sent).
+- Never put sensitive info (like passwords) in the token.
+- If user data changes (like name), the token won't update until the user logs in again.
+- Use claims for things like user id, email, and role. For other info, fetch from the API if needed.
+
+---
+
+## Auth & JWT Implementation Flow (Technical)
+
+1. **Registration Endpoint (`/api/v1/auth/register`)**
+   - Accepts user info (email, password, etc.) in a POST request.
+   - Checks if the email already exists.
+   - Hashes the password using ASP.NET Core Identity's `PasswordHasher<T>` (PBKDF2, salted).
+   - Saves the new user (with hashed password) to the database.
+
+2. **Login Endpoint (`/api/v1/auth/login`)**
+   - Accepts email and password in a POST request.
+   - Looks up the user by email.
+   - Verifies the password using `PasswordHasher<T>.VerifyHashedPassword`.
+   - If valid, generates a JWT token with claims (user id, email, role, etc.).
+   - Returns the JWT to the client.
+
+3. **JWT Token Generation**
+   - Uses a secret key from configuration (never hard-coded).
+   - Sets claims: user id (`sub`), email, role, and any other needed info.
+   - Sets expiry (e.g., 60 minutes).
+   - Signs the token with HMAC SHA256.
+
+4. **Protecting Endpoints**
+   - Add `[Authorize]` or `[Authorize(Roles = "Admin")]` to controllers/actions.
+   - The API checks for a valid JWT in the `Authorization: Bearer <token>` header.
+   - If valid, the user's claims are available in `User.Claims`.
+   - If not valid or missing, returns 401 Unauthorized.
+
+5. **Security Best Practices**
+   - Passwords are always hashed, never stored as plain text.
+   - JWT secret key is stored in environment variables/config, not in code.
+   - Only include non-sensitive info in JWT claims.
+   - Use HTTPS in production to protect tokens in transit.
+
+---
+
+This flow helps new developers understand how authentication and JWT security are implemented in this API.
+
 _Continue to update this file as you make progress in your project._
