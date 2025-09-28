@@ -1,7 +1,24 @@
 ignore ---
-@BASE_URI=http: //localhost:5025
+@BASE_URI=http://localhost:5025
 
 GET {{BASE_URI}}/health
 Accept: application/json
 
+###
+
+GET {{BASE_URI}}/api/v1/users
+Accept: application/json
+
+###
+
+POST {{BASE_URI}}/api/v1/users
+Accept: application/json
+Content-Type: application/json
+
+{
+  "firstName": "fake",
+  "lastName": "Doe",
+  "email": "fake.doe@example.com",
+  "age": 21
+}
 ###
