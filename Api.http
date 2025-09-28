@@ -19,6 +19,9 @@ Content-Type: application/json
   "firstName": "fake",
   "lastName": "Doe",
   "email": "fake.doe@example.com",
-  "age": 21
+  "age": 21,
+  "role": "Admin",
+  "isActive": true,
+  "passwordHash": "password"
 }
 ###
