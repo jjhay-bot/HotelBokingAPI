@@ -329,6 +329,26 @@ await _context.SaveChangesAsync(); // Throws if email is duplicate
 
 ---
 
+## Auth & JWT: Blocked User Handling
+
+- Blocked users (IsActive = false) cannot perform mutation requests (POST, PUT, PATCH, DELETE), even if their JWT is valid.
+- Blocked users can still access GET/read-only endpoints.
+- This is enforced by custom middleware, which checks the user's status for each mutation request.
+- To block a user instantly, set IsActive = false in the database; they will be denied on their next mutation request.
+
+---
+
+## Common Pitfalls & Important Notes
+
+- Always add `app.UseAuthorization();` after `app.UseAuthentication();` in `Program.cs` to enable role-based and policy-based authorization.
+- If `app.UseAuthorization();` is missing, all `[Authorize]` attributes will be ignored and protected endpoints will not work as expected (will always return 401).
+- Make sure your JWT config (key, issuer, audience) matches between your appsettings and the token generator.
+- Always use a fresh JWT after changing the signing key or restarting the app.
+- Double-check the Authorization header format: `Authorization: Bearer <token>`.
+- Use logging in JWT middleware to debug authentication failures.
+
+---
+
 This flow helps new developers understand how authentication and JWT security are implemented in this API.
 
 _Continue to update this file as you make progress in your project._

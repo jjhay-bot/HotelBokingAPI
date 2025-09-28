@@ -48,7 +48,7 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseAuthentication(); // Add this before UseAuthorization if you add it later
-
+app.UseAuthorization(); // <-- Ensure this is present and after UseAuthentication
 // Map controller endpoints
 app.MapControllers();
 

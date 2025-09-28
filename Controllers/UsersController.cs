@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authorization;
 
 // This controller uses dependency injection to receive an instance of ApiContext.
 // ApiContext is the Entity Framework Core DbContext for communicating with the database.
@@ -20,6 +21,7 @@ namespace Api.Controllers
         }
         // GET: api/v1/users
         [HttpGet]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> GetUsers(
             [FromQuery] int? minAge,
             [FromQuery] int? maxAge,
@@ -28,6 +30,7 @@ namespace Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
+            // Cleaned up: removed debug logging
             var query = _context.Users.AsQueryable();
 
             // Filtering

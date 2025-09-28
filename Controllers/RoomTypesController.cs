@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using System.Text.Json;
 
 namespace Api.Controllers
 {
@@ -41,6 +42,24 @@ namespace Api.Controllers
             if (existing == null) return NotFound();
             existing.Name = roomType.Name;
             existing.Description = roomType.Description;
+            await _context.SaveChangesAsync();
+            return NoContent();
+        }
+
+        // PATCH: api/v1/roomtypes/{id}
+        [HttpPatch("{id}")]
+        [Authorize(Roles = "Admin")]
+        public async Task<IActionResult> PatchRoomType(int id, [FromBody] JsonElement patchDoc)
+        {
+            var existing = await _context.RoomTypes.FindAsync(id);
+            if (existing == null) return NotFound();
+
+            // Only update provided fields
+            if (patchDoc.TryGetProperty("name", out var nameProp))
+                existing.Name = nameProp.GetString() ?? existing.Name;
+            if (patchDoc.TryGetProperty("description", out var descProp))
+                existing.Description = descProp.GetString() ?? existing.Description;
+
             await _context.SaveChangesAsync();
             return NoContent();
         }
