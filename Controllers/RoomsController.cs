@@ -23,11 +23,16 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetRooms()
         {
-            var rooms = await _context.Rooms.ToListAsync();
-            var roomDtos = rooms.Select(r => new RoomDto
+            var rooms = await _context.Rooms
+                .Include(r => r.RoomType)
+                .ToListAsync();
+            var galleries = await _context.Galleries.ToListAsync();
+
+            var roomDtos = rooms.Select(r => new RoomListItemDto
             {
                 Id = r.Id,
-                RoomTypeId = r.RoomTypeId,
+                RoomType = r.RoomType?.Name ?? string.Empty,
+                Description = r.RoomType?.Description ?? string.Empty,
                 RoomNumber = r.RoomNumber,
                 PricePerNight = r.PricePerNight,
                 Capacity = r.Capacity,
@@ -38,9 +43,15 @@ namespace api.Controllers
                 Amenities = string.IsNullOrEmpty(r.Amenities)
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
-                CreatedAt = r.CreatedAt,
-                UpdatedAt = r.UpdatedAt,
-                OccupiedByUserId = r.OccupiedByUserId
+                Gallery = galleries
+                    .Where(g => g.RoomId == r.Id)
+                    .Select(g => new GalleryDto
+                    {
+                        Id = g.Id,
+                        Title = g.Title,
+                        Img = g.Img,
+                        Alt = g.Alt
+                    }).ToList()
             }).ToList();
             return Ok(roomDtos);
         }
