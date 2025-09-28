@@ -2,7 +2,7 @@ ignore ---
 @BASE_URI=http://localhost:5025
 
 # Use a valid JWT token for mutation requests as an Admin or User
-@JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJsYXN0TmFtZSI6IlVzZXIiLCJhZ2UiOiIzMCIsImV4cCI6MTc1OTA2ODI3MiwiaXNzIjoiSG90ZWxCb29raW5nQXBpIiwiYXVkIjoiSG90ZWxCb29raW5nQXBpVXNlcnMifQ.c2jxhQcjt92a3-3yDB7dG3Lta9gjZpWx4DQ9qceUGzM
+@JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI4IiwiZW1haWwiOiJhZG1pbkBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkFkbWluIiwiZmlyc3ROYW1lIjoiQWRtaW4iLCJsYXN0TmFtZSI6IlVzZXIiLCJhZ2UiOiIzMCIsImV4cCI6MTc1OTA3Mzk5OSwiaXNzIjoiSG90ZWxCb29raW5nQXBpIiwiYXVkIjoiSG90ZWxCb29raW5nQXBpVXNlcnMifQ.TjXGZ0TtUk0GBStffBQiownSUtn3iH7Hg7jGzjxKHnU
 
 ### Health check
 
@@ -119,6 +119,7 @@ GET {{BASE_URI}}/api/v1/rooms
 Accept: application/json
 
 ### Create a new room (Admin only)
+# Note: amenities must be a comma-separated string, not an array
 POST {{BASE_URI}}/api/v1/rooms
 Accept: application/json
 Content-Type: application/json
@@ -133,7 +134,7 @@ Authorization: Bearer {{JWT_TOKEN}}
     "size": "65 sq m",
     "floor": 1,
     "status": "available",
-    "amenities": ["Balcony", "King Bed", "Mini Bar", "City View", "WiFi", "Air Conditioning"]
+    "amenities": "Balcony,King Bed,Mini Bar,City View,WiFi,Air Conditioning"
 }
 
 ### Patch a room (Admin only)
