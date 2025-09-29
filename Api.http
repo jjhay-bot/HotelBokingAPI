@@ -117,6 +117,10 @@ Authorization: Bearer {{JWT_TOKEN}}
 GET {{BASE_URI}}/api/v1/rooms
 Accept: application/json
 
+### Get room by id
+GET {{BASE_URI}}/api/v1/rooms/1
+Accept: application/json
+
 ### Create a new room (Admin only)
 # Note: amenities must be a comma-separated string, not an array
 POST {{BASE_URI}}/api/v1/rooms

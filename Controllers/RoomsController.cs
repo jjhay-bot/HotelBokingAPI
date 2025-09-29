@@ -114,5 +114,41 @@ namespace api.Controllers
             await _context.SaveChangesAsync();
             return NoContent();
         }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetRoom(int id)
+        {
+            var room = await _context.Rooms
+                .Include(r => r.RoomType)
+                .FirstOrDefaultAsync(r => r.Id == id);
+            if (room == null) return NotFound();
+
+            var galleries = await _context.Galleries.Where(g => g.RoomId == id).ToListAsync();
+
+            var roomDto = new RoomListItemDto
+            {
+                Id = room.Id,
+                RoomType = room.RoomType?.Name ?? string.Empty,
+                Description = room.RoomType?.Description ?? string.Empty,
+                RoomNumber = room.RoomNumber,
+                PricePerNight = room.PricePerNight,
+                Capacity = room.Capacity,
+                BedType = room.BedType,
+                Size = room.Size,
+                Floor = room.Floor,
+                Status = room.Status,
+                Amenities = string.IsNullOrEmpty(room.Amenities)
+                    ? new List<string>()
+                    : room.Amenities.Split(',').Select(a => a.Trim()).ToList(),
+                Gallery = galleries.Select(g => new GalleryDto
+                {
+                    Id = g.Id,
+                    Title = g.Title,
+                    Img = g.Img,
+                    Alt = g.Alt
+                }).ToList()
+            };
+            return Ok(roomDto);
+        }
     }
 }
