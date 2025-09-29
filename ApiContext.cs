@@ -37,7 +37,8 @@ public class ApiContext : DbContext
             new RoomType { Id = 3, Name = "Family Room", Description = "Perfect for families, with two queen beds and a sofa." },
             new RoomType { Id = 4, Name = "Deluxe Room", Description = "An upgraded room with enhanced amenities and a comfortable seating area." },
             new RoomType { Id = 5, Name = "Penthouse Suite", Description = "The ultimate in luxury, featuring panoramic views, a private jacuzzi, and a full kitchen." },
-            new RoomType { Id = 6, Name = "Studio Apartment", Description = "A modern, open-plan space with a small kitchenette, perfect for long-term stays." }
+            new RoomType { Id = 6, Name = "Studio Apartment", Description = "A modern, open-plan space with a small kitchenette, perfect for long-term stays." },
+            new RoomType { Id = 7, Name = "Luxury Suite", Description = "Luxury suite with a garden view and exclusive lounge access." }
         );
 
         // Rooms
@@ -47,7 +48,13 @@ public class ApiContext : DbContext
             new Room { Id = 3, RoomTypeId = 3, RoomNumber = 201, PricePerNight = 180, Capacity = 4, BedType = "Two Queen Beds", Size = "50 sq m", Floor = 2, Status = "occupied", Amenities = "Two Queen Beds,Sofa,WiFi,TV,Air Conditioning,Mini Fridge" },
             new Room { Id = 4, RoomTypeId = 4, RoomNumber = 202, PricePerNight = 200, Capacity = 3, BedType = "King Bed", Size = "45 sq m", Floor = 2, Status = "available", Amenities = "King Bed,Lounge Area,Mini Bar,WiFi,Air Conditioning,Room Service" },
             new Room { Id = 5, RoomTypeId = 5, RoomNumber = 301, PricePerNight = 500, Capacity = 4, BedType = "King Bed + Sofa Bed", Size = "120 sq m", Floor = 3, Status = "maintenance", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" },
-            new Room { Id = 6, RoomTypeId = 6, RoomNumber = 302, PricePerNight = 220, Capacity = 2, BedType = "Queen Bed", Size = "40 sq m", Floor = 3, Status = "available", Amenities = "Kitchenette,Work Desk,WiFi,TV,Air Conditioning,Weekly Housekeeping" }
+            new Room { Id = 6, RoomTypeId = 6, RoomNumber = 302, PricePerNight = 220, Capacity = 2, BedType = "Queen Bed", Size = "40 sq m", Floor = 3, Status = "available", Amenities = "Kitchenette,Work Desk,WiFi,TV,Air Conditioning,Weekly Housekeeping" },
+            new Room { Id = 7, RoomTypeId = 1, RoomNumber = 103, PricePerNight = 260, Capacity = 2, BedType = "King Bed", Size = "68 sq m", Floor = 1, Status = "available", Amenities = "Balcony,King Bed,Mini Bar,City View,WiFi,Air Conditioning" },
+            new Room { Id = 8, RoomTypeId = 1, RoomNumber = 104, PricePerNight = 255, Capacity = 3, BedType = "King Bed", Size = "70 sq m", Floor = 1, Status = "available", Amenities = "Balcony,King Bed,Mini Bar,WiFi,Air Conditioning" },
+            new Room { Id = 9, RoomTypeId = 4, RoomNumber = 203, PricePerNight = 210, Capacity = 3, BedType = "Queen Bed", Size = "48 sq m", Floor = 2, Status = "available", Amenities = "Queen Bed,Lounge Area,WiFi,Air Conditioning,Room Service" },
+            new Room { Id = 10, RoomTypeId = 4, RoomNumber = 204, PricePerNight = 215, Capacity = 2, BedType = "King Bed", Size = "50 sq m", Floor = 2, Status = "available", Amenities = "King Bed,Lounge Area,WiFi,Air Conditioning,Room Service" },
+            new Room { Id = 11, RoomTypeId = 5, RoomNumber = 302, PricePerNight = 520, Capacity = 4, BedType = "King Bed + Sofa Bed", Size = "125 sq m", Floor = 3, Status = "available", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" },
+            new Room { Id = 12, RoomTypeId = 5, RoomNumber = 303, PricePerNight = 530, Capacity = 5, BedType = "King Bed + Sofa Bed", Size = "130 sq m", Floor = 3, Status = "available", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" }
         );
 
         // Gallery

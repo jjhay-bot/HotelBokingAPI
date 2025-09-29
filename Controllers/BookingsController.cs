@@ -20,14 +20,20 @@ namespace api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            var bookings = await _context.Bookings.ToListAsync();
+            var bookings = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .ToListAsync();
             return Ok(bookings);
         }
 
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById(int id)
         {
-            var booking = await _context.Bookings.FindAsync(id);
+            var booking = await _context.Bookings
+                .Include(b => b.User)
+                .Include(b => b.Room)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (booking == null) return NotFound();
             return Ok(booking);
         }
@@ -36,6 +42,14 @@ namespace api.Controllers
         [Authorize]
         public async Task<IActionResult> Create([FromBody] Booking booking)
         {
+            // Extract userId from claims
+            var userIdClaim = User.FindFirst("userId")?.Value;
+            if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int userId))
+            {
+                return Unauthorized(new { message = "User ID not found in token." });
+            }
+            booking.UserId = userId; // Always use userId from claims
+
             _context.Bookings.Add(booking);
             // If booking is confirmed, set room status to Occupied and tag user/room
             if (booking.Status == "Confirmed")

@@ -82,7 +82,8 @@ namespace Api.Controllers
                 new Claim(ClaimTypes.Role, user.Role ?? "User"),
                 new Claim("firstName", user.FirstName ?? string.Empty),
                 new Claim("lastName", user.LastName ?? string.Empty),
-                new Claim("age", user.Age.ToString())
+                new Claim("age", user.Age.ToString()),
+                new Claim("userId", user.Id.ToString()) // Add userId to claims
             };
 
             var token = new JwtSecurityToken(
