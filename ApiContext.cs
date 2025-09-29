@@ -94,5 +94,14 @@ public class ApiContext : DbContext
             .HasOne(b => b.Room)
             .WithMany()
             .HasForeignKey(b => b.RoomId);
+
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => r.RoomTypeId);
+
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => r.Capacity);
+
+        modelBuilder.Entity<Booking>()
+            .HasIndex(b => new { b.RoomId, b.StartDate, b.EndDate });
     }
 }

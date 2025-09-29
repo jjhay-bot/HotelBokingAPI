@@ -21,11 +21,33 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetRooms()
+        public async Task<IActionResult> GetRooms(
+            [FromQuery] int? roomTypeId = null,
+            [FromQuery] int? guestCount = null,
+            [FromQuery] DateTime? checkIn = null,
+            [FromQuery] DateTime? checkOut = null)
         {
-            var rooms = await _context.Rooms
+            var roomsQuery = _context.Rooms
                 .Include(r => r.RoomType)
-                .ToListAsync();
+                .AsQueryable(); // Start with all rooms
+
+            if (roomTypeId.HasValue)
+                roomsQuery = roomsQuery.Where(r => r.RoomTypeId == roomTypeId.Value); // Filter by room type if provided
+            if (guestCount.HasValue)
+                roomsQuery = roomsQuery.Where(r => r.Capacity >= guestCount.Value); // Filter by guest count if provided
+
+            // Filter by availability if both checkIn and checkOut are provided
+            if (checkIn.HasValue && checkOut.HasValue)
+            {
+                var bookings = _context.Bookings
+                    .Where(b =>
+                        b.StartDate < checkOut.Value && b.EndDate > checkIn.Value
+                    ); // Get bookings that overlap with the requested dates
+                var bookedRoomIds = await bookings.Select(b => b.RoomId).Distinct().ToListAsync();
+                roomsQuery = roomsQuery.Where(r => !bookedRoomIds.Contains(r.Id));
+            }
+
+            var rooms = await roomsQuery.ToListAsync();
             var galleries = await _context.Galleries.ToListAsync();
 
             var roomDtos = rooms.Select(r => new RoomListItemDto
@@ -36,10 +58,10 @@ namespace api.Controllers
                 RoomNumber = r.RoomNumber,
                 PricePerNight = r.PricePerNight,
                 Capacity = r.Capacity,
-                BedType = r.BedType,
-                Size = r.Size,
+                BedType = r.BedType ?? string.Empty,
+                Size = r.Size ?? string.Empty,
                 Floor = r.Floor,
-                Status = r.Status,
+                Status = r.Status ?? string.Empty,
                 Amenities = string.IsNullOrEmpty(r.Amenities)
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
@@ -48,9 +70,9 @@ namespace api.Controllers
                     .Select(g => new GalleryDto
                     {
                         Id = g.Id,
-                        Title = g.Title,
-                        Img = g.Img,
-                        Alt = g.Alt
+                        Title = g.Title ?? string.Empty,
+                        Img = g.Img ?? string.Empty,
+                        Alt = g.Alt ?? string.Empty
                     }).ToList()
             }).ToList();
             return Ok(roomDtos);
@@ -133,19 +155,19 @@ namespace api.Controllers
                 RoomNumber = room.RoomNumber,
                 PricePerNight = room.PricePerNight,
                 Capacity = room.Capacity,
-                BedType = room.BedType,
-                Size = room.Size,
+                BedType = room.BedType ?? string.Empty,
+                Size = room.Size ?? string.Empty,
                 Floor = room.Floor,
-                Status = room.Status,
+                Status = room.Status ?? string.Empty,
                 Amenities = string.IsNullOrEmpty(room.Amenities)
                     ? new List<string>()
                     : room.Amenities.Split(',').Select(a => a.Trim()).ToList(),
                 Gallery = galleries.Select(g => new GalleryDto
                 {
                     Id = g.Id,
-                    Title = g.Title,
-                    Img = g.Img,
-                    Alt = g.Alt
+                    Title = g.Title ?? string.Empty,
+                    Img = g.Img ?? string.Empty,
+                    Alt = g.Alt ?? string.Empty
                 }).ToList()
             };
             return Ok(roomDto);

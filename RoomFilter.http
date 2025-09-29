@@ -1,0 +1,21 @@
+@BASE_URI=http://localhost:5025
+
+### Get all available rooms for a given date range, guest count, and room type
+GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=2&roomTypeId=1
+Accept: application/json
+
+### Get available rooms for a date range and guest count (any room type)
+GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=4
+Accept: application/json
+
+### Get available rooms for a date range only
+GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z
+Accept: application/json
+
+### Get rooms by room type only
+GET {{BASE_URI}}/api/v1/rooms?roomTypeId=2
+Accept: application/json
+
+### Get rooms by guest count only
+GET {{BASE_URI}}/api/v1/rooms?guestCount=2
+Accept: application/json
