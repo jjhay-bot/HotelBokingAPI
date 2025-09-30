@@ -60,7 +60,8 @@ builder.Services.AddCors(options =>
             "https://bedderdeals.fun-at.work"
         )
         .AllowAnyHeader()
-        .AllowAnyMethod();
+        .AllowAnyMethod()
+        .AllowCredentials(); // <-- Add this line
     });
 });
 
