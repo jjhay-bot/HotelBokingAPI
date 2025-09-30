@@ -38,7 +38,18 @@ namespace Api.Controllers
                 return Unauthorized(new { message = "Invalid email or password." });
             }
             var token = GenerateJwtToken(user);
-            return Ok(new { token });
+            // Return token and user details (id, email, role, firstName, lastName, isActive)
+            return Ok(new {
+                token,
+                user = new {
+                    id = user.Id,
+                    email = user.Email,
+                    role = user.Role,
+                    firstName = user.FirstName,
+                    lastName = user.LastName,
+                    isActive = user.IsActive
+                }
+            });
         }
 
         [HttpPost("register")]

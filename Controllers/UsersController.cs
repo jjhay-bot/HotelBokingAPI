@@ -63,6 +63,29 @@ namespace Api.Controllers
             // Add CurrentRoomId to user responses for admin dashboard
             var userResponses = _mapper.Map<List<UserDto>>(users);
 
+            // Attach reserved room info for each user
+            foreach (var userDto in userResponses)
+            {
+                var reservedBooking = await _context.Bookings
+                    .Where(b => b.UserId == userDto.Id)
+                    .OrderByDescending(b => b.CreatedAt)
+                    .FirstOrDefaultAsync();
+                if (reservedBooking != null)
+                {
+                    // Get room number
+                    var room = await _context.Rooms.FindAsync(reservedBooking.RoomId);
+                    userDto.ReservedRoomInfo = new ReservedRoomInfoDto
+                    {
+                        BookingId = reservedBooking.Id,
+                        RoomId = reservedBooking.RoomId,
+                        RoomNumber = room?.RoomNumber ?? 0,
+                        Status = reservedBooking.Status,
+                        StartDate = reservedBooking.StartDate,
+                        EndDate = reservedBooking.EndDate
+                    };
+                }
+            }
+
             return Ok(userResponses);
         }
         // POST: api/v1/users
