@@ -11,5 +11,7 @@ public class User
     public DateTime CreatedAt { get; set; }
     public DateTime? UpdatedAt { get; set; }
     public int? CurrentRoomId { get; set; } // Room currently occupied by user, null if none
+    public string? RefreshToken { get; set; } // Stores the latest refresh token
+    public DateTime? RefreshTokenExpiry { get; set; } // Expiry for the refresh token
     // Add navigation properties if needed later
 }

@@ -1,0 +1,37 @@
+@BASE_URL = http://localhost:5025/api/v1/auth
+@JWT_COOKIE = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMiIsImVtYWlsIjoiYWRtaW5AZ20uY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJmaXJzdE5hbWUiOiJhZG1pbiIsImxhc3ROYW1lIjoiamhheSIsImFnZSI6IjMwIiwidXNlcklkIjoiMTIiLCJleHAiOjE3NTkyNDcwMDEsImlzcyI6IkhvdGVsQm9va2luZ0FwaSIsImF1ZCI6IkhvdGVsQm9va2luZ0FwaVVzZXJzIn0.4J-ZSp7HYX-ZUeiMV1VRHN0EWcLWaRzhUDVT_qL7qlw
+
+@REFRESH_TOKEN_COOKIE = tRXaM54nrDhbdyccHiBnaWo2GsSB4YHg9nWiriB7y2VLmFhWOVsMRuiPIC9xEg01FRH75cSxuKxapBrvCpvIUA%3D%3D
+
+### Register (Test Account)
+POST {{BASE_URL}}/register
+Content-Type: application/json
+
+{
+  "email": "testuser@example.com",
+  "password": "testpass123",
+  "firstName": "Test",
+  "lastName": "User",
+  "age": 30
+}
+
+### Login (Admin Account)
+POST {{BASE_URL}}/login
+Content-Type: application/json
+
+{
+  "email": "admin@gm.com",
+  "password": "Password123"
+}
+
+### Get Current User (Me)
+GET {{BASE_URL}}/me
+Cookie: jwt={{JWT_COOKIE}}
+
+### Logout
+POST {{BASE_URL}}/logout
+Cookie: jwt={{JWT_COOKIE}}
+
+### Refresh Token
+POST {{BASE_URL}}/refresh
+Cookie: refreshToken={{REFRESH_TOKEN_COOKIE}}

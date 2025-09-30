@@ -7,6 +7,8 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Api.DTOs;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Cryptography;
 
 namespace Api.Controllers
 {
@@ -38,9 +40,36 @@ namespace Api.Controllers
                 return Unauthorized(new { message = "Invalid email or password." });
             }
             var token = GenerateJwtToken(user);
-            // Return token and user details (id, email, role, firstName, lastName, isActive)
+
+            // Generate refresh token
+            var refreshToken = GenerateRefreshToken();
+            user.RefreshToken = refreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7); // 7 days expiry
+            await _context.SaveChangesAsync();
+
+            // Set JWT as HttpOnly cookie
+            var jwtSettings = _config.GetSection("Jwt");
+            var secureCookie = Environment.GetEnvironmentVariable("COOKIE_SECURE") == "true";
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = secureCookie,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpiresInMinutes"]!))
+            };
+            Response.Cookies.Append("jwt", token, cookieOptions);
+
+            // Set refresh token as HttpOnly cookie
+            var refreshCookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = secureCookie,
+                SameSite = SameSiteMode.None,
+                Expires = user.RefreshTokenExpiry
+            };
+            Response.Cookies.Append("refreshToken", refreshToken, refreshCookieOptions);
+
             return Ok(new {
-                token,
                 user = new {
                     id = user.Id,
                     email = user.Email,
@@ -49,6 +78,98 @@ namespace Api.Controllers
                     lastName = user.LastName,
                     isActive = user.IsActive
                 }
+            });
+        }
+
+        [HttpPost("refresh")]
+        public async Task<IActionResult> Refresh()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (string.IsNullOrEmpty(refreshToken))
+            {
+                return Unauthorized(new { message = "Refresh token missing." });
+            }
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+            if (user == null || user.RefreshTokenExpiry < DateTime.UtcNow)
+            {
+                return Unauthorized(new { message = "Invalid or expired refresh token." });
+            }
+            // Optionally rotate refresh token
+            var newRefreshToken = GenerateRefreshToken();
+            user.RefreshToken = newRefreshToken;
+            user.RefreshTokenExpiry = DateTime.UtcNow.AddDays(7);
+            await _context.SaveChangesAsync();
+
+            var token = GenerateJwtToken(user);
+            var jwtSettings = _config.GetSection("Jwt");
+            var secureCookie = Environment.GetEnvironmentVariable("COOKIE_SECURE") == "true";
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = secureCookie,
+                SameSite = SameSiteMode.None,
+                Expires = DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["ExpiresInMinutes"]!))
+            };
+            Response.Cookies.Append("jwt", token, cookieOptions);
+
+            var refreshCookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = secureCookie,
+                SameSite = SameSiteMode.None,
+                Expires = user.RefreshTokenExpiry
+            };
+            Response.Cookies.Append("refreshToken", newRefreshToken, refreshCookieOptions);
+
+            return Ok(new { message = "Token refreshed." });
+        }
+
+        [HttpPost("logout")]
+        public async Task<IActionResult> Logout()
+        {
+            var refreshToken = Request.Cookies["refreshToken"];
+            if (!string.IsNullOrEmpty(refreshToken))
+            {
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.RefreshToken == refreshToken);
+                if (user != null)
+                {
+                    user.RefreshToken = null;
+                    user.RefreshTokenExpiry = null;
+                    await _context.SaveChangesAsync();
+                }
+            }
+            Response.Cookies.Delete("jwt");
+            Response.Cookies.Delete("refreshToken");
+            return Ok(new { message = "Logged out successfully." });
+        }
+
+        [HttpGet("me")]
+        [Authorize]
+        public async Task<IActionResult> Me()
+        {
+            // Get userId from JWT claims
+            var userIdClaim = User.FindFirst("userId");
+            if (userIdClaim == null)
+            {
+                return Unauthorized(new { message = "User not authenticated." });
+            }
+            if (!int.TryParse(userIdClaim.Value, out int userId))
+            {
+                return Unauthorized(new { message = "Invalid user id in token." });
+            }
+            var user = await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                return Unauthorized(new { message = "User not found." });
+            }
+            return Ok(new {
+                id = user.Id,
+                email = user.Email,
+                role = user.Role,
+                firstName = user.FirstName,
+                lastName = user.LastName,
+                age = user.Age,
+                isActive = user.IsActive
             });
         }
 
@@ -106,6 +227,16 @@ namespace Api.Controllers
             );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
+        }
+
+        private string GenerateRefreshToken()
+        {
+            var randomBytes = new byte[64];
+            using (var rng = RandomNumberGenerator.Create())
+            {
+                rng.GetBytes(randomBytes);
+            }
+            return Convert.ToBase64String(randomBytes);
         }
     }
 }

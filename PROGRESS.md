@@ -61,7 +61,13 @@ This markdown file will be used to document the step-by-step progress of the pro
    - Added explanatory comments about dependency injection and how the controller communicates with the database using Entity Framework Core.
    - Next: Implement CRUD endpoints for users.
 
-10. *(Add your next steps here as you progress!)*
+10. **Updated JWT Authentication**
+    - Switched to using HTTP-only cookies for secure cross-site authentication.
+    - Changed cookie options in `AuthController` to `SameSite=None` and `Secure=true` for frontend-backend on different domains.
+    - Configured JWT Bearer authentication to read the token from the cookie in `Program.cs`.
+    - Documented important notes and best practices in `JwtCookieAuthNotes.md`.
+
+11. *(Add your next steps here as you progress!)*
 
 ---
 
