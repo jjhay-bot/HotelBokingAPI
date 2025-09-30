@@ -25,16 +25,22 @@ namespace api.Controllers
             [FromQuery] int? roomTypeId = null,
             [FromQuery] int? guestCount = null,
             [FromQuery] DateTime? checkIn = null,
-            [FromQuery] DateTime? checkOut = null)
+            [FromQuery] DateTime? checkOut = null,
+            [FromQuery] string? status = null,
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 2)
         {
             var roomsQuery = _context.Rooms
                 .Include(r => r.RoomType)
-                .AsQueryable(); // Start with all rooms
+                .OrderByDescending(r => r.Id)
+                .AsQueryable(); // Start with all rooms, newest first
 
             if (roomTypeId.HasValue)
                 roomsQuery = roomsQuery.Where(r => r.RoomTypeId == roomTypeId.Value); // Filter by room type if provided
             if (guestCount.HasValue)
                 roomsQuery = roomsQuery.Where(r => r.Capacity >= guestCount.Value); // Filter by guest count if provided
+            if (!string.IsNullOrEmpty(status))
+                roomsQuery = roomsQuery.Where(r => r.Status == status); // Filter by status if provided
 
             // Filter by availability if both checkIn and checkOut are provided
             if (checkIn.HasValue && checkOut.HasValue)
@@ -47,7 +53,11 @@ namespace api.Controllers
                 roomsQuery = roomsQuery.Where(r => !bookedRoomIds.Contains(r.Id));
             }
 
-            var rooms = await roomsQuery.ToListAsync();
+            var totalCount = await roomsQuery.CountAsync();
+            var rooms = await roomsQuery
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
             var galleries = await _context.Galleries.ToListAsync();
 
             var roomDtos = rooms.Select(r => new RoomListItemDto
@@ -75,7 +85,14 @@ namespace api.Controllers
                         Alt = g.Alt ?? string.Empty
                     }).ToList()
             }).ToList();
-            return Ok(roomDtos);
+
+            var result = new {
+                totalCount,
+                page,
+                pageSize,
+                rooms = roomDtos
+            };
+            return Ok(result);
         }
 
         // POST: api/v1/roomtypes

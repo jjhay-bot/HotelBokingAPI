@@ -1,5 +1,5 @@
 ignore ---
-@BASE_URI=http://localhost:5025
+@BASE_URI=https://hotelbookingapi-bpfkd9d4amdhbea9.southeastasia-01.azurewebsites.net
 # Use a valid JWT token for mutation requests as an Admin or User
 @JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJ0ZXN0dXNlckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJmaXJzdE5hbWUiOiJUZXN0IiwibGFzdE5hbWUiOiJVc2VyIiwiYWdlIjoiMjIiLCJleHAiOjE3NTkxNzIxNTcsImlzcyI6IkhvdGVsQm9va2luZ0FwaSIsImF1ZCI6IkhvdGVsQm9va2luZ0FwaVVzZXJzIn0.taBC4cVwM-TO_-cflhUH4YttciJScjE6wkTTp6ppkdQ
 

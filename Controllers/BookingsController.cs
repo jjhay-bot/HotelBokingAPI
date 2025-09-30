@@ -50,22 +50,42 @@ namespace api.Controllers
             }
             booking.UserId = userId; // Always use userId from claims
 
-            _context.Bookings.Add(booking);
-            // If booking is confirmed, set room status to Occupied and tag user/room
-            if (booking.Status == "Confirmed")
+            // Prevent overlapping bookings for Reserved or Confirmed status
+            if (booking.Status == "Reserved" || booking.Status == "Confirmed")
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                var user = await _context.Users.FindAsync(booking.UserId);
-                if (room != null)
+                bool hasConflict = await _context.Bookings.AnyAsync(b =>
+                    b.RoomId == booking.RoomId &&
+                    (b.Status == "Reserved" || b.Status == "Confirmed") &&
+                    b.StartDate < booking.EndDate && booking.StartDate < b.EndDate
+                );
+                if (hasConflict)
+                {
+                    return Conflict(new { message = "Room is already booked or reserved for the selected dates." });
+                }
+            }
+
+            _context.Bookings.Add(booking);
+            var room = await _context.Rooms.FindAsync(booking.RoomId);
+            var user = await _context.Users.FindAsync(booking.UserId);
+            var now = System.DateTime.UtcNow;
+            if (room != null)
+            {
+                if (booking.Status == "Confirmed" && booking.StartDate <= now && booking.EndDate > now)
                 {
                     room.Status = "Occupied";
                     room.OccupiedByUserId = booking.UserId;
-                    room.UpdatedAt = System.DateTime.UtcNow;
                 }
-                if (user != null)
+                else if (booking.Status == "Reserved" && booking.StartDate > now)
                 {
-                    user.CurrentRoomId = booking.RoomId;
+                    // Only set to Reserved if not already Occupied
+                    if (room.Status != "Occupied")
+                        room.Status = "Reserved";
                 }
+                room.UpdatedAt = now;
+            }
+            if (user != null && booking.Status == "Confirmed")
+            {
+                user.CurrentRoomId = booking.RoomId;
             }
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetById), new { id = booking.Id }, booking);
@@ -78,16 +98,17 @@ namespace api.Controllers
             if (id != booking.Id) return BadRequest();
             var existing = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
             _context.Entry(booking).State = EntityState.Modified;
+            var room = await _context.Rooms.FindAsync(booking.RoomId);
+            var user = await _context.Users.FindAsync(booking.UserId);
+            var now = System.DateTime.UtcNow;
             // Only update room/user status if status is newly set to Confirmed
             if (booking.Status == "Confirmed" && existing != null && existing.Status != "Confirmed")
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                var user = await _context.Users.FindAsync(booking.UserId);
-                if (room != null)
+                if (room != null && booking.StartDate <= now && booking.EndDate > now)
                 {
                     room.Status = "Occupied";
                     room.OccupiedByUserId = booking.UserId;
-                    room.UpdatedAt = System.DateTime.UtcNow;
+                    room.UpdatedAt = now;
                 }
                 if (user != null)
                 {
@@ -97,17 +118,30 @@ namespace api.Controllers
             // If status is changed to CheckedOut, reset room and user
             if (booking.Status == "CheckedOut" && existing != null && existing.Status != "CheckedOut")
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                var user = await _context.Users.FindAsync(booking.UserId);
                 if (room != null)
                 {
-                    room.Status = "Available";
+                    // Check if there are any future Reserved/Confirmed bookings for this room
+                    bool hasFuture = await _context.Bookings.AnyAsync(b =>
+                        b.RoomId == booking.RoomId &&
+                        (b.Status == "Reserved" || b.Status == "Confirmed") &&
+                        b.StartDate > now
+                    );
+                    room.Status = hasFuture ? "Reserved" : "Available";
                     room.OccupiedByUserId = null;
-                    room.UpdatedAt = System.DateTime.UtcNow;
+                    room.UpdatedAt = now;
                 }
                 if (user != null)
                 {
                     user.CurrentRoomId = null;
+                }
+            }
+            // If status is Reserved and future, set room status to Reserved if not Occupied
+            if (booking.Status == "Reserved" && booking.StartDate > now)
+            {
+                if (room != null && room.Status != "Occupied")
+                {
+                    room.Status = "Reserved";
+                    room.UpdatedAt = now;
                 }
             }
             await _context.SaveChangesAsync();
@@ -127,16 +161,17 @@ namespace api.Controllers
             });
             if (!ModelState.IsValid) return BadRequest(ModelState);
             booking.UpdatedAt = System.DateTime.UtcNow;
+            var room = await _context.Rooms.FindAsync(booking.RoomId);
+            var user = await _context.Users.FindAsync(booking.UserId);
+            var now = System.DateTime.UtcNow;
             // Only update room/user status if status is newly set to Confirmed
-            if (booking.Status == "Confirmed" && oldStatus != "Confirmed")
+            if (booking.Status == "Confirmed" && oldStatus != "Confirmed" && booking.StartDate <= now && booking.EndDate > now)
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                var user = await _context.Users.FindAsync(booking.UserId);
                 if (room != null)
                 {
                     room.Status = "Occupied";
                     room.OccupiedByUserId = booking.UserId;
-                    room.UpdatedAt = System.DateTime.UtcNow;
+                    room.UpdatedAt = now;
                 }
                 if (user != null)
                 {
@@ -146,17 +181,30 @@ namespace api.Controllers
             // If status is changed to CheckedOut, reset room and user
             if (booking.Status == "CheckedOut" && oldStatus != "CheckedOut")
             {
-                var room = await _context.Rooms.FindAsync(booking.RoomId);
-                var user = await _context.Users.FindAsync(booking.UserId);
                 if (room != null)
                 {
-                    room.Status = "Available";
+                    // Check if there are any future Reserved/Confirmed bookings for this room
+                    bool hasFuture = await _context.Bookings.AnyAsync(b =>
+                        b.RoomId == booking.RoomId &&
+                        (b.Status == "Reserved" || b.Status == "Confirmed") &&
+                        b.StartDate > now
+                    );
+                    room.Status = hasFuture ? "Reserved" : "Available";
                     room.OccupiedByUserId = null;
-                    room.UpdatedAt = System.DateTime.UtcNow;
+                    room.UpdatedAt = now;
                 }
                 if (user != null)
                 {
                     user.CurrentRoomId = null;
+                }
+            }
+            // If status is Reserved and future, set room status to Reserved if not Occupied
+            if (booking.Status == "Reserved" && booking.StartDate > now)
+            {
+                if (room != null && room.Status != "Occupied")
+                {
+                    room.Status = "Reserved";
+                    room.UpdatedAt = now;
                 }
             }
             await _context.SaveChangesAsync();

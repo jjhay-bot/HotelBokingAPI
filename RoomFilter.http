@@ -1,21 +1,30 @@
 @BASE_URI=http://localhost:5025
 
-### Get all available rooms for a given date range, guest count, and room type
-GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=2&roomTypeId=1
+### Get all available rooms for a given date range, guest count, and room type (paginated)
+GET {{BASE_URI}}/api/v1/rooms
+?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=2&roomTypeId=1&page=1&pageSize=5
 Accept: application/json
 
-### Get available rooms for a date range and guest count (any room type)
-GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=4
+### Get available rooms for a date range and guest count (any room type, paginated)
+GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=4&page=1&pageSize=5
 Accept: application/json
 
-### Get available rooms for a date range only
-GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z
+### Get available rooms for a date range only (paginated)
+GET {{BASE_URI}}/api/v1/rooms?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&page=1&pageSize=5
 Accept: application/json
 
-### Get rooms by room type only
-GET {{BASE_URI}}/api/v1/rooms?roomTypeId=2
+### Get rooms by room type only (paginated)
+GET {{BASE_URI}}/api/v1/rooms?roomTypeId=2&page=1&pageSize=5
 Accept: application/json
 
-### Get rooms by guest count only
-GET {{BASE_URI}}/api/v1/rooms?guestCount=2
+### Get rooms by guest count only (paginated)
+GET {{BASE_URI}}/api/v1/rooms?guestCount=2&page=1&pageSize=5
+Accept: application/json
+
+### Get rooms by status (e.g., only available rooms)
+GET {{BASE_URI}}/api/v1/rooms?status=available&page=1&pageSize=5
+Accept: application/json
+
+### Get rooms by status (e.g., only occupied rooms)
+GET {{BASE_URI}}/api/v1/rooms?status=occupied&page=1&pageSize=5
 Accept: application/json

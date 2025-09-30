@@ -88,7 +88,43 @@ public class ApiContext : DbContext
             new Gallery { Id = 21, RoomId = 6, Title = "Studio Overview - Open Plan Living", Img = "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1658&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Modern studio apartment with open plan design" },
             new Gallery { Id = 22, RoomId = 6, Title = "Sleeping Area - Queen Bed Setup", Img = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1626&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Queen bed area in studio apartment" },
             new Gallery { Id = 23, RoomId = 6, Title = "Kitchenette - Compact Cooking Space", Img = "https://images.unsplash.com/photo-1604709177225-055f99402ea3?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Compact kitchenette with modern appliances" },
-            new Gallery { Id = 24, RoomId = 6, Title = "Work Space - Desk & Storage", Img = "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1658&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Dedicated workspace with desk and storage" }
+            new Gallery { Id = 24, RoomId = 6, Title = "Work Space - Desk & Storage", Img = "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1658&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Dedicated workspace with desk and storage" },
+            // Room 7 Gallery
+            new Gallery { Id = 25, RoomId = 7, Title = "Room Overview - Modern King Suite", Img = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1740&auto=format&fit=crop", Alt = "Modern king suite with city view and balcony" },
+            // Room 8 Gallery
+            new Gallery { Id = 26, RoomId = 8, Title = "Room Overview - Spacious King Room", Img = "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1740&auto=format&fit=crop", Alt = "Spacious king room with balcony and modern decor" },
+            // Room 9 Gallery
+            new Gallery { Id = 27, RoomId = 9, Title = "Room Overview - Deluxe Queen Room", Img = "https://images.unsplash.com/photo-1464983953574-0892a716854b?q=80&w=1740&auto=format&fit=crop", Alt = "Deluxe queen room with lounge area" },
+            // Room 10 Gallery
+            new Gallery { Id = 28, RoomId = 10, Title = "Room Overview - King Deluxe", Img = "https://images.unsplash.com/photo-1507089947368-19c1da9775ae?q=80&w=1740&auto=format&fit=crop", Alt = "King deluxe room with lounge and modern amenities" },
+            // Room 11 Gallery
+            new Gallery { Id = 29, RoomId = 11, Title = "Penthouse Suite - Living Area", Img = "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?q=80&w=1740&auto=format&fit=crop", Alt = "Penthouse suite living area with panoramic view" },
+            // Room 12 Gallery
+            new Gallery { Id = 30, RoomId = 12, Title = "Penthouse Suite - Master Bedroom", Img = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=1740&auto=format&fit=crop", Alt = "Penthouse suite master bedroom with luxury furnishings" },
+            // Room 7 Gallery (Unsplash)
+            new Gallery { Id = 31, RoomId = 7, Title = "Modern King Suite - Living Area", Img = "https://plus.unsplash.com/premium_photo-1676321688630-9558e7d2be10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Modern king suite living area, Unsplash" },
+            new Gallery { Id = 32, RoomId = 7, Title = "Modern King Suite - Bedroom", Img = "https://images.unsplash.com/photo-1605346434674-a440ca4dc4c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King suite bedroom, Unsplash" },
+            new Gallery { Id = 33, RoomId = 7, Title = "Modern King Suite - Window View", Img = "https://images.unsplash.com/photo-1559414059-34fe0a59e57a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King suite window view, Unsplash" },
+            // Room 8 Gallery (Unsplash)
+            new Gallery { Id = 34, RoomId = 8, Title = "Spacious King Room - Living Area", Img = "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Spacious king room living area, Unsplash" },
+            new Gallery { Id = 35, RoomId = 8, Title = "Spacious King Room - Decor", Img = "https://plus.unsplash.com/premium_photo-1684175656161-21dddfef1324?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King room decor, Unsplash" },
+            new Gallery { Id = 36, RoomId = 8, Title = "Spacious King Room - Bed", Img = "https://images.unsplash.com/photo-1562438668-bcf0ca6578f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King room bed, Unsplash" },
+            // Room 9 Gallery (Unsplash)
+            new Gallery { Id = 37, RoomId = 9, Title = "Deluxe Queen Room - Armchairs", Img = "https://images.unsplash.com/photo-1507038772120-7fff76f79d79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room armchairs, Unsplash" },
+            new Gallery { Id = 38, RoomId = 9, Title = "Deluxe Queen Room - Bed", Img = "https://images.unsplash.com/photo-1631049552240-59c37f38802b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room bed, Unsplash" },
+            new Gallery { Id = 39, RoomId = 9, Title = "Deluxe Queen Room - Nightstand", Img = "https://plus.unsplash.com/premium_photo-1671269704807-5479855d03fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room nightstand, Unsplash" },
+            // Room 10 Gallery (Unsplash)
+            new Gallery { Id = 40, RoomId = 10, Title = "King Deluxe - Living Area", Img = "https://images.unsplash.com/photo-1631048835388-46642de1582e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe living area, Unsplash" },
+            new Gallery { Id = 41, RoomId = 10, Title = "King Deluxe - Bed", Img = "https://images.unsplash.com/photo-1595161695996-f746349f4945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe bed, Unsplash" },
+            new Gallery { Id = 42, RoomId = 10, Title = "King Deluxe - Tray Service", Img = "https://plus.unsplash.com/premium_photo-1689609949898-5f7a10649fef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe tray service, Unsplash" },
+            // Room 11 Gallery (Unsplash)
+            new Gallery { Id = 43, RoomId = 11, Title = "Penthouse Suite - Dining Area", Img = "https://images.unsplash.com/photo-1621293954908-907159247fc8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite dining area, Unsplash" },
+            new Gallery { Id = 44, RoomId = 11, Title = "Penthouse Suite - Floral Sofa", Img = "https://images.unsplash.com/photo-1592230228921-df3a88a2244e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite floral sofa, Unsplash" },
+            new Gallery { Id = 45, RoomId = 11, Title = "Penthouse Suite - Pillows", Img = "https://images.unsplash.com/photo-1559841771-599b6eeaca62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite pillows, Unsplash" },
+            // Room 12 Gallery (Unsplash)
+            new Gallery { Id = 46, RoomId = 12, Title = "Penthouse Suite - Windows", Img = "https://plus.unsplash.com/premium_photo-1684445035187-c4bc7c96bc5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite windows, Unsplash" },
+            new Gallery { Id = 47, RoomId = 12, Title = "Penthouse Suite - Curtain View", Img = "https://images.unsplash.com/photo-1590490359854-dfba19688d70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite curtain view, Unsplash" },
+            new Gallery { Id = 48, RoomId = 12, Title = "Penthouse Suite - Chair & Bed", Img = "https://images.unsplash.com/photo-1631049307290-bb947b114627?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite chair and bed, Unsplash" }
         );
 
         modelBuilder.Entity<Booking>()
