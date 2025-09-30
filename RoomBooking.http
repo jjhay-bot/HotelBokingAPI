@@ -1,0 +1,121 @@
+ignore ---
+
+# Booking Flow Simulation
+@BASE_URI=http://localhost:5025
+@JWT_TOKEN=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI5IiwiZW1haWwiOiJib29raW5ndGVzdGVyQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiVXNlciIsImZpcnN0TmFtZSI6IkJvb2tpbmciLCJsYXN0TmFtZSI6IlRlc3RlciIsImFnZSI6IjI4IiwidXNlcklkIjoiOSIsImV4cCI6MTc1OTIxMjA5MiwiaXNzIjoiSG90ZWxCb29raW5nQXBpIiwiYXVkIjoiSG90ZWxCb29raW5nQXBpVXNlcnMifQ.u9kaWpg_r2Kw0CPDL6T-wIr7EBOVBbhJbAvrc1mMmk8
+
+### 0. Register a new user
+POST {{BASE_URI}}/api/v1/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "firstName": "Booking",
+    "lastName": "Tester",
+    "email": "bookingtester@example.com",
+    "age": 28,
+    "password": "testpass123",
+    "role": "Admin"
+}
+
+### 0.1 Login as the new user
+POST {{BASE_URI}}/api/v1/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "bookingtester@example.com",
+    "password": "testpass123"
+}
+
+### 1. Create a new booking (Reserved)
+POST {{BASE_URI}}/api/v1/bookings
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "roomId": 2,
+    "startDate": "2025-12-10T14:00:00Z",
+    "endDate": "2025-12-15T12:00:00Z",
+    "status": "Reserved",
+    "totalPrice": 500.00,
+    "notes": "Initial reservation"
+}
+
+### 2. Get booking by id (replace 1 with actual booking id)
+GET {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+### 3. Update status to ForPayment (PUT)
+PUT {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 7,
+    "roomId": 2,
+    "startDate": "2025-12-10T14:00:00Z",
+    "endDate": "2025-12-15T12:00:00Z",
+    "status": "ForPayment",
+    "totalPrice": 500.00,
+    "notes": "Initial reservation"
+}
+
+### 4. Update status to Confirmed (PUT)
+PUT {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 7,
+    "roomId": 2,
+    "startDate": "2025-12-10T14:00:00Z",
+    "endDate": "2025-12-15T12:00:00Z",
+    "status": "Confirmed",
+    "totalPrice": 500.00,
+    "notes": "Initial reservation"
+}
+
+### 5. Update status to CheckedIn (PUT)
+PUT {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 7,
+    "roomId": 2,
+    "startDate": "2025-12-10T14:00:00Z",
+    "endDate": "2025-12-15T12:00:00Z",
+    "status": "CheckedIn",
+    "totalPrice": 500.00,
+    "notes": "Initial reservation"
+}
+
+### 6. Update status to CheckedOut (PUT)
+PUT {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Content-Type: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+{
+    "id": 7,
+    "roomId": 2,
+    "startDate": "2025-12-10T14:00:00Z",
+    "endDate": "2025-12-15T12:00:00Z",
+    "status": "CheckedOut",
+    "totalPrice": 500.00,
+    "notes": "Initial reservation"
+}
+
+### 7. Get booking by id (final)
+GET {{BASE_URI}}/api/v1/bookings/7
+Accept: application/json
+Authorization: Bearer {{JWT_TOKEN}}
+
+# Replace booking id (7) and roomId as needed for your test data.
+# Ensure you use the JWT token from the login step above.

@@ -96,15 +96,20 @@ namespace api.Controllers
         public async Task<IActionResult> Update(int id, [FromBody] Booking booking)
         {
             if (id != booking.Id) return BadRequest();
+            // Get userId from claims
+            var userIdClaim = User.Claims.FirstOrDefault(c => c.Type == "userId");
+            if (userIdClaim == null) return Unauthorized();
+            if (!int.TryParse(userIdClaim.Value, out int userId)) return Unauthorized();
+            booking.UserId = userId;
             var existing = await _context.Bookings.AsNoTracking().FirstOrDefaultAsync(b => b.Id == id);
             _context.Entry(booking).State = EntityState.Modified;
             var room = await _context.Rooms.FindAsync(booking.RoomId);
             var user = await _context.Users.FindAsync(booking.UserId);
             var now = System.DateTime.UtcNow;
-            // Only update room/user status if status is newly set to Confirmed
-            if (booking.Status == "Confirmed" && existing != null && existing.Status != "Confirmed")
+            // Always set CurrentRoomId for active confirmed bookings
+            if (booking.Status == "Confirmed" && booking.StartDate <= now && booking.EndDate > now)
             {
-                if (room != null && booking.StartDate <= now && booking.EndDate > now)
+                if (room != null)
                 {
                     room.Status = "Occupied";
                     room.OccupiedByUserId = booking.UserId;
@@ -164,8 +169,8 @@ namespace api.Controllers
             var room = await _context.Rooms.FindAsync(booking.RoomId);
             var user = await _context.Users.FindAsync(booking.UserId);
             var now = System.DateTime.UtcNow;
-            // Only update room/user status if status is newly set to Confirmed
-            if (booking.Status == "Confirmed" && oldStatus != "Confirmed" && booking.StartDate <= now && booking.EndDate > now)
+            // Always set CurrentRoomId for active confirmed bookings
+            if (booking.Status == "Confirmed" && booking.StartDate <= now && booking.EndDate > now)
             {
                 if (room != null)
                 {
