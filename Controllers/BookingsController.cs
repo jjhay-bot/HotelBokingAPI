@@ -18,13 +18,29 @@ namespace api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<IActionResult> GetAll(
+            [FromQuery] int page = 1,
+            [FromQuery] int pageSize = 10)
         {
-            var bookings = await _context.Bookings
+            var query = _context.Bookings
                 .Include(b => b.User)
                 .Include(b => b.Room)
+                .AsQueryable();
+
+            var totalCount = await query.CountAsync();
+            var bookings = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
-            return Ok(bookings);
+
+            var result = new
+            {
+                totalCount,
+                page,
+                pageSize,
+                bookings
+            };
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

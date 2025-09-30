@@ -33,7 +33,6 @@ namespace Api.Controllers
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 10)
         {
-            // Cleaned up: removed debug logging
             var query = _context.Users.AsQueryable();
 
             // Filtering
@@ -45,25 +44,22 @@ namespace Api.Controllers
             // Sorting
             query = sortBy?.ToLower() switch
             {
-                // Not indexed (no index by default - firstname/lastname)
                 "firstname" => desc ? query.OrderByDescending(u => u.FirstName) : query.OrderBy(u => u.FirstName),
                 "lastname" => desc ? query.OrderByDescending(u => u.LastName) : query.OrderBy(u => u.LastName),
-                // Indexed column (uses index - efficient faster queries)
                 "age" => desc ? query.OrderByDescending(u => u.Age) : query.OrderBy(u => u.Age),
                 "email" => desc ? query.OrderByDescending(u => u.Email) : query.OrderBy(u => u.Email),
                 _ => desc ? query.OrderByDescending(u => u.Id) : query.OrderBy(u => u.Id)
             };
 
             // Pagination
+            var totalCount = await query.CountAsync();
             var users = await query
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
 
-            // Add CurrentRoomId to user responses for admin dashboard
             var userResponses = _mapper.Map<List<UserDto>>(users);
 
-            // Attach reserved room info for each user
             foreach (var userDto in userResponses)
             {
                 var reservedBooking = await _context.Bookings
@@ -72,7 +68,6 @@ namespace Api.Controllers
                     .FirstOrDefaultAsync();
                 if (reservedBooking != null)
                 {
-                    // Get room number
                     var room = await _context.Rooms.FindAsync(reservedBooking.RoomId);
                     userDto.ReservedRoomInfo = new ReservedRoomInfoDto
                     {
@@ -86,7 +81,15 @@ namespace Api.Controllers
                 }
             }
 
-            return Ok(userResponses);
+            var result = new
+            {
+                totalCount,
+                page,
+                pageSize,
+                users = userResponses
+            };
+
+            return Ok(result);
         }
         // POST: api/v1/users
         [HttpPost]
