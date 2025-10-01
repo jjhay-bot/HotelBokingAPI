@@ -80,6 +80,53 @@
 
 ---
 
+# Secure JWT Cookie Handling Guide
+
+## Setting JWT and Refresh Token as HttpOnly Cookies
+- Always set cookies with `HttpOnly`, `Secure`, and `SameSite=None` for cross-site authentication.
+- Example in ASP.NET Core:
+
+```csharp
+var cookieOptions = new CookieOptions {
+    HttpOnly = true,
+    Secure = true, // or use env var
+    SameSite = SameSiteMode.None,
+    Path = "/",
+    Expires = DateTime.UtcNow.AddMinutes(jwtExpiryMinutes)
+};
+Response.Cookies.Append("jwt", token, cookieOptions);
+Response.Cookies.Append("refreshToken", refreshToken, cookieOptions);
+```
+
+## Deleting JWT and Refresh Token Cookies
+- To delete cookies in the browser, use the **same attributes** as when setting them (especially `Path`, `SameSite`, and `Secure`).
+- Example in ASP.NET Core:
+
+```csharp
+var cookieOptions = new CookieOptions {
+    HttpOnly = true,
+    Secure = true, // or use env var
+    SameSite = SameSiteMode.None,
+    Path = "/"
+};
+Response.Cookies.Delete("jwt", cookieOptions);
+Response.Cookies.Delete("refreshToken", cookieOptions);
+```
+
+## Why Matching Attributes Matter
+- If you set cookies with custom attributes, you must use the same attributes to delete them. Otherwise, the browser will not remove the cookie.
+- This is especially important for authentication cookies in cross-site scenarios.
+
+## Frontend Notes
+- HttpOnly cookies are **not accessible via JavaScript**. The browser sends them automatically with requests.
+- To ensure cookies are sent, use `credentials: 'include'` in fetch/XHR.
+
+---
+
+**Always match cookie attributes for secure authentication and proper logout!**
+
+---
+
 See above for additional cookie, CORS, and environment variable notes.
 
 **Reference:**
