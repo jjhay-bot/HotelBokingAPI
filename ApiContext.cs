@@ -144,6 +144,9 @@ public class ApiContext : DbContext
         modelBuilder.Entity<Room>()
             .HasIndex(r => r.Capacity);
 
+        modelBuilder.Entity<Room>()
+            .HasIndex(r => r.PricePerNight);
+
         modelBuilder.Entity<Booking>()
             .HasIndex(b => new { b.RoomId, b.StartDate, b.EndDate });
     }

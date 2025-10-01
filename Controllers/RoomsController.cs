@@ -27,6 +27,8 @@ namespace api.Controllers
             [FromQuery] DateTime? checkIn = null,
             [FromQuery] DateTime? checkOut = null,
             [FromQuery] string? status = null,
+            [FromQuery] decimal? minPrice = null, // Add minPrice filter
+            [FromQuery] decimal? maxPrice = null, // Add maxPrice filter
             [FromQuery] int page = 1,
             [FromQuery] int pageSize = 2)
         {
@@ -41,6 +43,10 @@ namespace api.Controllers
                 roomsQuery = roomsQuery.Where(r => r.Capacity >= guestCount.Value); // Filter by guest count if provided
             if (!string.IsNullOrEmpty(status))
                 roomsQuery = roomsQuery.Where(r => r.Status == status); // Filter by status if provided
+            if (minPrice.HasValue)
+                roomsQuery = roomsQuery.Where(r => r.PricePerNight >= minPrice.Value); // Filter by min price
+            if (maxPrice.HasValue)
+                roomsQuery = roomsQuery.Where(r => r.PricePerNight <= maxPrice.Value); // Filter by max price
 
             // Filter by availability if both checkIn and checkOut are provided
             if (checkIn.HasValue && checkOut.HasValue)
