@@ -138,8 +138,16 @@ namespace Api.Controllers
                     await _context.SaveChangesAsync();
                 }
             }
-            Response.Cookies.Delete("jwt");
-            Response.Cookies.Delete("refreshToken");
+            var secureCookie = Environment.GetEnvironmentVariable("COOKIE_SECURE") == "true";
+            var cookieOptions = new CookieOptions
+            {
+                HttpOnly = true,
+                Secure = secureCookie,
+                SameSite = SameSiteMode.None,
+                Path = "/"
+            };
+            Response.Cookies.Delete("jwt", cookieOptions);
+            Response.Cookies.Delete("refreshToken", cookieOptions);
             return Ok(new { message = "Logged out successfully." });
         }
 
