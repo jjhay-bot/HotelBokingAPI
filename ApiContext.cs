@@ -54,7 +54,9 @@ public class ApiContext : DbContext
             new Room { Id = 9, RoomTypeId = 4, RoomNumber = 203, PricePerNight = 210, Capacity = 3, BedType = "Queen Bed", Size = "48 sq m", Floor = 2, Status = "available", Amenities = "Queen Bed,Lounge Area,WiFi,Air Conditioning,Room Service" },
             new Room { Id = 10, RoomTypeId = 4, RoomNumber = 204, PricePerNight = 215, Capacity = 2, BedType = "King Bed", Size = "50 sq m", Floor = 2, Status = "available", Amenities = "King Bed,Lounge Area,WiFi,Air Conditioning,Room Service" },
             new Room { Id = 11, RoomTypeId = 5, RoomNumber = 302, PricePerNight = 520, Capacity = 4, BedType = "King Bed + Sofa Bed", Size = "125 sq m", Floor = 3, Status = "available", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" },
-            new Room { Id = 12, RoomTypeId = 5, RoomNumber = 303, PricePerNight = 530, Capacity = 5, BedType = "King Bed + Sofa Bed", Size = "130 sq m", Floor = 3, Status = "available", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" }
+            new Room { Id = 12, RoomTypeId = 5, RoomNumber = 303, PricePerNight = 530, Capacity = 5, BedType = "King Bed + Sofa Bed", Size = "130 sq m", Floor = 3, Status = "available", Amenities = "Jacuzzi,Full Kitchen,Panoramic View,Private Terrace,WiFi,Premium Sound System" },
+            new Room { Id = 13, RoomTypeId = 2, RoomNumber = 105, PricePerNight = 130, Capacity = 2, BedType = "Queen Bed", Size = "36 sq m", Floor = 1, Status = "available", Amenities = "Queen Bed,WiFi,TV,Mini Fridge,Air Conditioning" },
+            new Room { Id = 14, RoomTypeId = 3, RoomNumber = 205, PricePerNight = 185, Capacity = 4, BedType = "Two Queen Beds", Size = "52 sq m", Floor = 2, Status = "available", Amenities = "Two Queen Beds,Sofa,WiFi,TV,Air Conditioning,Mini Fridge" }
         );
 
         // Gallery
@@ -101,30 +103,16 @@ public class ApiContext : DbContext
             new Gallery { Id = 29, RoomId = 11, Title = "Penthouse Suite - Living Area", Img = "https://images.unsplash.com/photo-1519125323398-675f0ddb6308?q=80&w=1740&auto=format&fit=crop", Alt = "Penthouse suite living area with panoramic view" },
             // Room 12 Gallery
             new Gallery { Id = 30, RoomId = 12, Title = "Penthouse Suite - Master Bedroom", Img = "https://images.unsplash.com/photo-1519974719765-e6559eac2575?q=80&w=1740&auto=format&fit=crop", Alt = "Penthouse suite master bedroom with luxury furnishings" },
-            // Room 7 Gallery (Unsplash)
-            new Gallery { Id = 31, RoomId = 7, Title = "Modern King Suite - Living Area", Img = "https://plus.unsplash.com/premium_photo-1676321688630-9558e7d2be10?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Modern king suite living area, Unsplash" },
-            new Gallery { Id = 32, RoomId = 7, Title = "Modern King Suite - Bedroom", Img = "https://images.unsplash.com/photo-1605346434674-a440ca4dc4c0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King suite bedroom, Unsplash" },
-            new Gallery { Id = 33, RoomId = 7, Title = "Modern King Suite - Window View", Img = "https://images.unsplash.com/photo-1559414059-34fe0a59e57a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King suite window view, Unsplash" },
-            // Room 8 Gallery (Unsplash)
-            new Gallery { Id = 34, RoomId = 8, Title = "Spacious King Room - Living Area", Img = "https://images.unsplash.com/photo-1609766857041-ed402ea8069a?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Spacious king room living area, Unsplash" },
-            new Gallery { Id = 35, RoomId = 8, Title = "Spacious King Room - Decor", Img = "https://plus.unsplash.com/premium_photo-1684175656161-21dddfef1324?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King room decor, Unsplash" },
-            new Gallery { Id = 36, RoomId = 8, Title = "Spacious King Room - Bed", Img = "https://images.unsplash.com/photo-1562438668-bcf0ca6578f0?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King room bed, Unsplash" },
-            // Room 9 Gallery (Unsplash)
-            new Gallery { Id = 37, RoomId = 9, Title = "Deluxe Queen Room - Armchairs", Img = "https://images.unsplash.com/photo-1507038772120-7fff76f79d79?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room armchairs, Unsplash" },
-            new Gallery { Id = 38, RoomId = 9, Title = "Deluxe Queen Room - Bed", Img = "https://images.unsplash.com/photo-1631049552240-59c37f38802b?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room bed, Unsplash" },
-            new Gallery { Id = 39, RoomId = 9, Title = "Deluxe Queen Room - Nightstand", Img = "https://plus.unsplash.com/premium_photo-1671269704807-5479855d03fe?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Deluxe queen room nightstand, Unsplash" },
-            // Room 10 Gallery (Unsplash)
-            new Gallery { Id = 40, RoomId = 10, Title = "King Deluxe - Living Area", Img = "https://images.unsplash.com/photo-1631048835388-46642de1582e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe living area, Unsplash" },
-            new Gallery { Id = 41, RoomId = 10, Title = "King Deluxe - Bed", Img = "https://images.unsplash.com/photo-1595161695996-f746349f4945?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe bed, Unsplash" },
-            new Gallery { Id = 42, RoomId = 10, Title = "King Deluxe - Tray Service", Img = "https://plus.unsplash.com/premium_photo-1689609949898-5f7a10649fef?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "King deluxe tray service, Unsplash" },
-            // Room 11 Gallery (Unsplash)
-            new Gallery { Id = 43, RoomId = 11, Title = "Penthouse Suite - Dining Area", Img = "https://images.unsplash.com/photo-1621293954908-907159247fc8?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite dining area, Unsplash" },
-            new Gallery { Id = 44, RoomId = 11, Title = "Penthouse Suite - Floral Sofa", Img = "https://images.unsplash.com/photo-1592230228921-df3a88a2244e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite floral sofa, Unsplash" },
-            new Gallery { Id = 45, RoomId = 11, Title = "Penthouse Suite - Pillows", Img = "https://images.unsplash.com/photo-1559841771-599b6eeaca62?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite pillows, Unsplash" },
-            // Room 12 Gallery (Unsplash)
-            new Gallery { Id = 46, RoomId = 12, Title = "Penthouse Suite - Windows", Img = "https://plus.unsplash.com/premium_photo-1684445035187-c4bc7c96bc5d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite windows, Unsplash" },
-            new Gallery { Id = 47, RoomId = 12, Title = "Penthouse Suite - Curtain View", Img = "https://images.unsplash.com/photo-1590490359854-dfba19688d70?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite curtain view, Unsplash" },
-            new Gallery { Id = 48, RoomId = 12, Title = "Penthouse Suite - Chair & Bed", Img = "https://images.unsplash.com/photo-1631049307290-bb947b114627?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=1080", Alt = "Penthouse suite chair and bed, Unsplash" }
+            // Room 13 Gallery
+            new Gallery { Id = 49, RoomId = 13, Title = "Standard Room - Overview", Img = "https://images.unsplash.com/photo-1506744038136-46273834b3fb?q=80&w=1740&auto=format&fit=crop", Alt = "Standard hotel room with queen bed and city view" },
+            new Gallery { Id = 50, RoomId = 13, Title = "Standard Room - Bed Area", Img = "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebfd?q=80&w=1740&auto=format&fit=crop", Alt = "Queen bed with modern decor" },
+            new Gallery { Id = 51, RoomId = 13, Title = "Standard Room - Bathroom", Img = "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?q=80&w=1740&auto=format&fit=crop", Alt = "Clean bathroom in standard hotel room" },
+            new Gallery { Id = 52, RoomId = 13, Title = "Standard Room - Work Desk", Img = "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?q=80&w=1626&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Work desk in standard hotel room" },
+            // Room 14 Gallery
+            new Gallery { Id = 53, RoomId = 14, Title = "Family Room - Overview", Img = "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?q=80&w=1740&auto=format&fit=crop", Alt = "Spacious family room with two queen beds" },
+            new Gallery { Id = 54, RoomId = 14, Title = "Family Room - Sleeping Area", Img = "https://images.unsplash.com/photo-1602002418082-a4443e081dd1?q=80&w=1674&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Two queen beds in family hotel room" },
+            new Gallery { Id = 55, RoomId = 14, Title = "Family Room - Living Area", Img = "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?q=80&w=1658&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Living area with sofa in family hotel room" },
+            new Gallery { Id = 56, RoomId = 14, Title = "Family Room - Bathroom", Img = "https://images.unsplash.com/photo-1584622781564-1d987f7333c1?q=80&w=1740&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D", Alt = "Bathroom in family hotel room" }
         );
 
         modelBuilder.Entity<Booking>()
