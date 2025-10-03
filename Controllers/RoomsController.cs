@@ -49,13 +49,12 @@ namespace api.Controllers
                 roomsQuery = roomsQuery.Where(r => r.PricePerNight <= maxPrice.Value); // Filter by max price
 
             // Filter by availability if both checkIn and checkOut are provided
+            List<int> bookedRoomIds = new List<int>();
             if (checkIn.HasValue && checkOut.HasValue)
             {
                 var bookings = _context.Bookings
-                    .Where(b =>
-                        b.StartDate < checkOut.Value && b.EndDate > checkIn.Value
-                    ); // Get bookings that overlap with the requested dates
-                var bookedRoomIds = await bookings.Select(b => b.RoomId).Distinct().ToListAsync();
+                    .Where(b => b.StartDate < checkOut.Value && b.EndDate > checkIn.Value);
+                bookedRoomIds = await bookings.Select(b => b.RoomId).Distinct().ToListAsync();
                 roomsQuery = roomsQuery.Where(r => !bookedRoomIds.Contains(r.Id));
             }
 
@@ -77,7 +76,7 @@ namespace api.Controllers
                 BedType = r.BedType ?? string.Empty,
                 Size = r.Size ?? string.Empty,
                 Floor = r.Floor,
-                Status = r.Status ?? string.Empty,
+                Status = r.Status == "Maintenance" ? r.Status : "Available",
                 Amenities = string.IsNullOrEmpty(r.Amenities)
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
