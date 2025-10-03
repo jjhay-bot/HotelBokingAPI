@@ -76,7 +76,8 @@ namespace api.Controllers
                 BedType = r.BedType ?? string.Empty,
                 Size = r.Size ?? string.Empty,
                 Floor = r.Floor,
-                Status = r.Status == "Maintenance" ? r.Status : "Available",
+                Status = r.Status != null && r.Status.Equals("Maintenance", StringComparison.OrdinalIgnoreCase) ? r.Status : "Available",
+                // Status = r.Status ?? string.Empty,
                 Amenities = string.IsNullOrEmpty(r.Amenities)
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
