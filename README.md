@@ -1,6 +1,18 @@
 # Hotel Booking API
 
-A simple .NET Core API for managing hotel bookings, users, rooms, and room types.
+## Project Overview
+A robust ASP.NET Core API for managing hotel bookings, users, rooms, room types, and galleries. Features include JWT authentication, CSRF protection, role-based access, advanced filtering, and more. Designed for modern web and mobile hotel management solutions.
+
+## Tools and Frameworks Used
+- **ASP.NET Core** (Web API)
+- **Entity Framework Core** (ORM, PostgreSQL)
+- **AutoMapper** (DTO mapping)
+- **JWT Authentication** (Microsoft.IdentityModel.Tokens)
+- **PasswordHasher** (ASP.NET Identity)
+- **CORS** (Cross-Origin Resource Sharing)
+- **Swagger/OpenAPI** (API documentation)
+- **PlantUML** (ERD diagrams)
+- **REST Client** (for .http file testing)
 
 ## Entity Relationship Diagram (ERD)
 
