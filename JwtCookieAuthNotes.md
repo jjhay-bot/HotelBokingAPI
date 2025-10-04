@@ -132,3 +132,32 @@ See above for additional cookie, CORS, and environment variable notes.
 **Reference:**
 - [MDN: SameSite cookies](https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Set-Cookie/SameSite)
 - [ASP.NET Core Docs: Cookie authentication](https://learn.microsoft.com/en-us/aspnet/core/security/authentication/cookie)
+
+## CSRF Middleware Logic (Double-Submit Cookie)
+
+- CSRF validation is enforced for all state-changing requests (POST, PUT, PATCH, DELETE).
+- The middleware checks that the `XSRF-TOKEN` cookie matches the `X-CSRF-Token` header.
+- CSRF validation is skipped for `/api/v1/auth/login` and `/api/v1/auth/register` endpoints to allow authentication without a CSRF token.
+- If the tokens are missing or do not match, a 403 Forbidden response is returned.
+- JWT authentication is handled via the `jwt` cookie.
+
+Example code:
+```csharp
+app.Use(async (context, next) =>
+{
+    // Only check CSRF for state-changing requests and exclude auth endpoints
+    if ((context.Request.Method == "POST" || context.Request.Method == "PUT" || context.Request.Method == "PATCH" || context.Request.Method == "DELETE")
+        && !(context.Request.Path.StartsWithSegments("/api/v1/auth/login") || context.Request.Path.StartsWithSegments("/api/v1/auth/register")))
+    {
+        var cookieToken = context.Request.Cookies["XSRF-TOKEN"];
+        var headerToken = context.Request.Headers["X-CSRF-Token"].ToString();
+        if (string.IsNullOrEmpty(cookieToken) || string.IsNullOrEmpty(headerToken) || cookieToken != headerToken)
+        {
+            context.Response.StatusCode = 403;
+            await context.Response.CompleteAsync();
+            return;
+        }
+    }
+    await next();
+});
+```
