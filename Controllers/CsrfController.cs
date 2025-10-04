@@ -28,7 +28,7 @@ namespace Api.Controllers
             {
                 HttpOnly = false, // Must be readable by JS
                 Secure = true,
-                SameSite = SameSiteMode.Strict,
+                SameSite = SameSiteMode.None, // Allow cross-site cookie for FE/BE on separate domains
                 Expires = expires
             };
             Response.Cookies.Append("XSRF-TOKEN", csrfToken, cookieOptions);
