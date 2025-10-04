@@ -1,8 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text.Json;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -49,13 +45,12 @@ namespace api.Controllers
                 roomsQuery = roomsQuery.Where(r => r.PricePerNight <= maxPrice.Value); // Filter by max price
 
             // Filter by availability if both checkIn and checkOut are provided
+            List<int> bookedRoomIds = new List<int>();
             if (checkIn.HasValue && checkOut.HasValue)
             {
                 var bookings = _context.Bookings
-                    .Where(b =>
-                        b.StartDate < checkOut.Value && b.EndDate > checkIn.Value
-                    ); // Get bookings that overlap with the requested dates
-                var bookedRoomIds = await bookings.Select(b => b.RoomId).Distinct().ToListAsync();
+                    .Where(b => b.StartDate < checkOut.Value && b.EndDate > checkIn.Value);
+                bookedRoomIds = await bookings.Select(b => b.RoomId).Distinct().ToListAsync();
                 roomsQuery = roomsQuery.Where(r => !bookedRoomIds.Contains(r.Id));
             }
 
@@ -77,7 +72,7 @@ namespace api.Controllers
                 BedType = r.BedType ?? string.Empty,
                 Size = r.Size ?? string.Empty,
                 Floor = r.Floor,
-                Status = r.Status ?? string.Empty,
+                Status = r.Status?.ToLower() == "maintenance" ? r.Status : "Available",                // Status = r.Status ?? string.Empty,
                 Amenities = string.IsNullOrEmpty(r.Amenities)
                     ? new List<string>()
                     : r.Amenities.Split(',').Select(a => a.Trim()).ToList(),
@@ -92,7 +87,8 @@ namespace api.Controllers
                     }).ToList()
             }).ToList();
 
-            var result = new {
+            var result = new
+            {
                 totalCount,
                 page,
                 pageSize,
@@ -181,7 +177,7 @@ namespace api.Controllers
                 BedType = room.BedType ?? string.Empty,
                 Size = room.Size ?? string.Empty,
                 Floor = room.Floor,
-                Status = room.Status ?? string.Empty,
+                Status = room.Status?.ToLower() == "maintenance" ? room.Status : "Available",    
                 Amenities = string.IsNullOrEmpty(room.Amenities)
                     ? new List<string>()
                     : room.Amenities.Split(',').Select(a => a.Trim()).ToList(),

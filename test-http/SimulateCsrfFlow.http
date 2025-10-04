@@ -1,0 +1,52 @@
+@JWT_COOKIE = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxNSIsImVtYWlsIjoiYWRtaW4yQGV4YW1wbGUuY29tIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJmaXJzdE5hbWUiOiJBZG1pbiIsImxhc3ROYW1lIjoiVXNlciIsImFnZSI6IjMwIiwidXNlcklkIjoiMTUiLCJleHAiOjE3NTk1ODM1MDksImlzcyI6IkhvdGVsQm9va2luZ0FwaSIsImF1ZCI6IkhvdGVsQm9va2luZ0FwaVVzZXJzIn0.GzfNFvePmAKuYCf76P1cvfHS5T9x5m2fSaqAxat2JhE
+
+@csrfToken = 1+iSBZ/7hYUxqkQZGaHgpfa4/Cqm6YWZSOlkOc15KS4=
+
+### 1. Register a new admin user
+POST http://localhost:5025/api/v1/auth/register
+Accept: application/json
+Content-Type: application/json
+
+{
+    "firstName": "Admin",
+    "lastName": "User",
+    "email": "admin2@example.com",
+    "age": 30,
+    "password": "adminpass",
+    "role": "Admin"
+}
+
+### 2. Login as admin (get JWT cookie)
+POST http://localhost:5025/api/v1/auth/login
+Accept: application/json
+Content-Type: application/json
+
+{
+    "email": "admin2@example.com",
+    "password": "adminpass"
+}
+
+### 3. Get CSRF token (sets XSRF-TOKEN cookie)
+GET http://localhost:5025/api/v1/csrf-sessions
+Accept: application/json
+Cookie: jwt={{JWT_COOKIE}};
+
+### 4. Create a new room (CSRF-protected, must send both cookies and header)
+# Replace {{JWT_COOKIE}} and {{csrfToken}} with actual values from previous responses
+POST http://localhost:5025/api/v1/rooms
+Accept: application/json
+Content-Type: application/json
+Cookie: jwt={{JWT_COOKIE}}; XSRF-TOKEN={{csrfToken}}
+X-CSRF-Token: {{csrfToken}}
+
+{
+    "roomTypeId": 1,
+    "roomNumber": 101,
+    "pricePerNight": 250.00,
+    "capacity": 2,
+    "bedType": "King Bed",
+    "size": "65 sq m",
+    "floor": 1,
+    "status": "available",
+    "amenities": "Balcony,King Bed,Mini Bar,City View,WiFi,Air Conditioning"
+}

@@ -1,10 +1,11 @@
 API Structure & Relationships (Simple Diagram)
 
 [User] <--- books --- [Booking] --- is for ---> [Room] --- has ---> [RoomType]
-   |                        |
-   |                        |
-   |                        v
-   |                  [Gallery]
+   |                                               |
+   |                                               |
+   |                                               |
+   |                                               v
+   |                                           [Gallery]
    |
    +--- occupies ---> [Room] (CurrentRoomId)
 

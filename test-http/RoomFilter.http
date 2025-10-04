@@ -1,7 +1,7 @@
 @BASE_URI=http://localhost:5025
 
 ### Get all available rooms for a given date range, guest count, and room type (paginated)
-GET {{BASE_URI}}/api/v1/rooms
+GET {{BASE_URI}}/api/v1/rooms?
 ?checkIn=2025-10-01T14:00:00Z&checkOut=2025-10-05T12:00:00Z&guestCount=2&roomTypeId=1&page=1&pageSize=5
 Accept: application/json
 
@@ -27,4 +27,8 @@ Accept: application/json
 
 ### Get rooms by status (e.g., only occupied rooms)
 GET {{BASE_URI}}/api/v1/rooms?status=occupied&page=1&pageSize=5
+Accept: application/json
+
+### Get all rooms (paginated)
+GET {{BASE_URI}}/api/v1/rooms?page=1&pageSize=20
 Accept: application/json

@@ -1,0 +1,32 @@
+@JWT_COOKIE = eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI3IiwiZW1haWwiOiJ0ZXN0dXNlckBleGFtcGxlLmNvbSIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IlVzZXIiLCJmaXJzdE5hbWUiOiJUZXN0IiwibGFzdE5hbWUiOiJVc2VyIiwiYWdlIjoiMjIiLCJ1c2VySWQiOiI3IiwiZXhwIjoxNzU5NTgyOTE5LCJpc3MiOiJIb3RlbEJvb2tpbmdBcGkiLCJhdWQiOiJIb3RlbEJvb2tpbmdBcGlVc2VycyJ9.J90RsQYhThTDXkdTDnP573enIlj9zXxWcVsZgEKToGM
+@BASE_URL = http://localhost:5025/api/v1
+
+@csrfToken=kkMikzTnv%2BrtW5AdT6bLkx%2BywWsWiLOdjQbDh0b%2FQ5I%3D
+
+### Get CSRF token (must be authenticated, JWT cookie required)
+GET {{BASE_URL}}/csrf-sessions
+Accept: application/json
+Cookie: jwt={{JWT_COOKIE}}
+
+# If using JWT in header, uncomment below:
+# Authorization: Bearer <your-jwt-token>
+
+### Example of using CSRF token in a state-changing request
+# First, get the CSRF token from the previous response or cookie
+# Then, send it in the X-CSRF-Token header for POST/PUT/DELETE
+POST {{BASE_URL}}/users
+Accept: application/json
+# X-CSRF-Token: {{csrfToken}}
+Content-Type: application/json
+# If using JWT in header, uncomment below:
+# Authorization: Bearer <your-jwt-token>
+
+{
+  "example": "data"
+}
+
+### Get all users (Admin only)
+
+GET {{BASE_URL}}/users
+Accept: application/json
+# X-CSRF-Token: {{csrfToken}}

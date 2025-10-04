@@ -75,7 +75,24 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
-app.UseAuthentication(); // Add this before UseAuthorization if you add it later
+app.UseAuthentication();
+app.Use(async (context, next) =>
+{
+    // Only check CSRF for state-changing requests and exclude auth endpoints
+    if ((context.Request.Method == "POST" || context.Request.Method == "PUT" || context.Request.Method == "PATCH" || context.Request.Method == "DELETE")
+        && !(context.Request.Path.StartsWithSegments("/api/v1/auth/login") || context.Request.Path.StartsWithSegments("/api/v1/auth/register")))
+    {
+        var cookieToken = context.Request.Cookies["XSRF-TOKEN"];
+        var headerToken = context.Request.Headers["X-CSRF-Token"].ToString();
+        if (string.IsNullOrEmpty(cookieToken) || string.IsNullOrEmpty(headerToken) || cookieToken != headerToken)
+        {
+            context.Response.StatusCode = 403;
+            await context.Response.CompleteAsync();
+            return;
+        }
+    }
+    await next();
+});
 app.UseAuthorization(); // <-- Ensure this is present and after UseAuthentication
 // Map controller endpoints
 app.MapControllers();

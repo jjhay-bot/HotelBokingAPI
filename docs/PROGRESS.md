@@ -393,4 +393,17 @@ await _context.SaveChangesAsync(); // Throws if email is duplicate
 
 ---
 
+## Room Status Logic (API)
+
+- The `Status` property in the API response for rooms is now dynamically set based on booking data and the requested check-in/check-out dates.
+- If both dates are provided, `Status` will be "Occupied" or "Available" depending on whether the room is booked for that range.
+- If no dates are provided, the static value from the database is used.
+- This avoids confusion for frontend consumers and provides real-time availability.
+
+### Future Plan
+- Consider removing the static `Status` field from the database and DTOs entirely, and rely only on dynamic status computed from bookings.
+- This will ensure the API always reflects true room availability and avoids stale or misleading status values.
+
+---
+
 _Continue to update this file as you make progress in your project._
