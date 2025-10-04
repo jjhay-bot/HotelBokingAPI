@@ -181,7 +181,7 @@ namespace api.Controllers
                 BedType = room.BedType ?? string.Empty,
                 Size = room.Size ?? string.Empty,
                 Floor = room.Floor,
-                Status = room.Status ?? string.Empty,
+                Status = room.Status?.ToLower() == "maintenance" ? room.Status : "Available",    
                 Amenities = string.IsNullOrEmpty(room.Amenities)
                     ? new List<string>()
                     : room.Amenities.Split(',').Select(a => a.Trim()).ToList(),
