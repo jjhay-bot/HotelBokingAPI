@@ -9,7 +9,7 @@ public class Room
     public string? BedType { get; set; } // e.g., "Queen", "King", "Twin"
     public string? Size { get; set; } // e.g., "30 sqm"
     public int Floor { get; set; } // 2nd Floor (2)
-    public string? Status { get; set; } // e.g., "Available", "Occupied", "Maintenance", "Reserved" (we migth consider removing this on the future as status should be from booking not here?)
+    public string? Status { get; set; } // e.g., "Available","Maintenance"
     public string? Amenities { get; set; } // e.g., "WiFi,TV,Mini Bar"
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
