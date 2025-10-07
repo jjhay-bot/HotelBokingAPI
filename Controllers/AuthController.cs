@@ -8,6 +8,7 @@ using System.Text;
 using Api.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Cryptography;
+using Api.Data;
 
 namespace Api.Controllers
 {

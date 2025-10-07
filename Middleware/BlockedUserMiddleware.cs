@@ -1,5 +1,6 @@
 using System.Security.Claims;
 using Microsoft.EntityFrameworkCore;
+using Api.Data;
 
 namespace Api.Middleware
 {
