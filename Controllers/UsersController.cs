@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authorization;
 using AutoMapper;
+using Api.Data;
 
 // This controller uses dependency injection to receive an instance of ApiContext.
 // ApiContext is the Entity Framework Core DbContext for communicating with the database.
